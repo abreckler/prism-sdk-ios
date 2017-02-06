@@ -12,14 +12,17 @@
 #import "PRUser.h"
 #import "PRAPIClient.h"
 #import "NSString+PrismUtils.h"
+@import ReplayKit;
 
-@interface PrismRecorder() <UIAlertViewDelegate>
-@property (strong, nonatomic) NSMutableArray *uploads;
+@interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate>
 @property (strong, nonatomic) PRUser *currentUser;
 @property (nonatomic) PRPost *currentPost;
 @property (nonatomic) NSString *errorMessage;
-@property (nonatomic, weak) UIWindow *mainWindow;
 @property (strong, nonatomic) PRAPIClient *apiClient;
+@property (nonatomic, weak) UIWindow *mainWindow;
+@property (nonatomic) NSTimeInterval applicationActivatedAtTime;
+//@property (nonatomic, strong) VideoAnnotation *videoAnnotation;
+@property (weak, nonatomic) RPPreviewViewController *previewViewController;
 @end
 
 static PrismRecorder *sharedManager = nil;
@@ -136,6 +139,32 @@ static PrismRecorder *sharedManager = nil;
 
 
 #pragma mark - private
+
+
+- (void)applicationWillEnterForeground:(NSNotification *)notification
+{
+    if (RPScreenRecorder.sharedRecorder.isRecording) {
+        [RPScreenRecorder.sharedRecorder discardRecordingWithHandler:^{
+            self.previewViewController = nil;
+        }];
+    }
+}
+
+- (void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    self.applicationActivatedAtTime = NSDate.date.timeIntervalSince1970;
+}
+
+-  (void)applicationWillResignActive:(NSNotification *)notification
+{
+    if (RPScreenRecorder.sharedRecorder.isRecording) {
+        [RPScreenRecorder.sharedRecorder discardRecordingWithHandler:^{
+            self.previewViewController = nil;
+        }];
+    }
+}
+
+
 
 -(BOOL)isDebugEnabled {
     //#ifdef DEBUG
