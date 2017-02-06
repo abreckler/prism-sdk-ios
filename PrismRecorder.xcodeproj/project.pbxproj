@@ -8,12 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2001E488D9A00DCBB5F /* PrismRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2081E48904B00DCBB5F /* PRPhotosUtils.h */; };
+		E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2091E48904B00DCBB5F /* PRPhotosUtils.m */; };
+		E240B20E1E48905A00DCBB5F /* PRAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B20C1E48905A00DCBB5F /* PRAsset.h */; };
+		E240B20F1E48905A00DCBB5F /* PRAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B20D1E48905A00DCBB5F /* PRAsset.m */; };
+		E240B2121E4890CC00DCBB5F /* PRAssetsDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2101E4890CC00DCBB5F /* PRAssetsDataSource.h */; };
+		E240B2131E4890CC00DCBB5F /* PRAssetsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2111E4890CC00DCBB5F /* PRAssetsDataSource.m */; };
+		E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E240B1FD1E488D9A00DCBB5F /* PrismRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PrismRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E240B2001E488D9A00DCBB5F /* PrismRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrismRecorder.h; sourceTree = "<group>"; };
 		E240B2011E488D9A00DCBB5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E240B2081E48904B00DCBB5F /* PRPhotosUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRPhotosUtils.h; sourceTree = "<group>"; };
+		E240B2091E48904B00DCBB5F /* PRPhotosUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPhotosUtils.m; sourceTree = "<group>"; };
+		E240B20C1E48905A00DCBB5F /* PRAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAsset.h; sourceTree = "<group>"; };
+		E240B20D1E48905A00DCBB5F /* PRAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRAsset.m; sourceTree = "<group>"; };
+		E240B2101E4890CC00DCBB5F /* PRAssetsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAssetsDataSource.h; sourceTree = "<group>"; };
+		E240B2111E4890CC00DCBB5F /* PRAssetsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRAssetsDataSource.m; sourceTree = "<group>"; };
+		E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAssetsProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +62,13 @@
 			children = (
 				E240B2001E488D9A00DCBB5F /* PrismRecorder.h */,
 				E240B2011E488D9A00DCBB5F /* Info.plist */,
+				E240B2081E48904B00DCBB5F /* PRPhotosUtils.h */,
+				E240B2091E48904B00DCBB5F /* PRPhotosUtils.m */,
+				E240B20C1E48905A00DCBB5F /* PRAsset.h */,
+				E240B20D1E48905A00DCBB5F /* PRAsset.m */,
+				E240B2101E4890CC00DCBB5F /* PRAssetsDataSource.h */,
+				E240B2111E4890CC00DCBB5F /* PRAssetsDataSource.m */,
+				E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */,
 			);
 			path = PrismRecorder;
 			sourceTree = "<group>";
@@ -59,7 +80,11 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */,
 				E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */,
+				E240B20E1E48905A00DCBB5F /* PRAsset.h in Headers */,
+				E240B2121E4890CC00DCBB5F /* PRAssetsDataSource.h in Headers */,
+				E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,6 +157,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E240B20F1E48905A00DCBB5F /* PRAsset.m in Sources */,
+				E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */,
+				E240B2131E4890CC00DCBB5F /* PRAssetsDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
