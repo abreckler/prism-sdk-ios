@@ -68,6 +68,7 @@ static PrismRecorder *sharedManager = nil;
 }
 
 //http://stackoverflow.com/questions/10154958/ios-how-to-detect-shake-motion
+//http://stackoverflow.com/questions/19131957/ios-motion-detection-motion-detection-sensitivity-levels
 - (void)attachToWindow
 {
     if (self.mainWindow) return;
