@@ -15,6 +15,8 @@
 		E240B2121E4890CC00DCBB5F /* PRAssetsDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2101E4890CC00DCBB5F /* PRAssetsDataSource.h */; };
 		E240B2131E4890CC00DCBB5F /* PRAssetsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2111E4890CC00DCBB5F /* PRAssetsDataSource.m */; };
 		E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */; };
+		E240B21C1E489DD100DCBB5F /* PRAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B21A1E489DD100DCBB5F /* PRAPIClient.h */; };
+		E240B21D1E489DD100DCBB5F /* PRAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B21B1E489DD100DCBB5F /* PRAPIClient.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		E240B2111E4890CC00DCBB5F /* PRAssetsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRAssetsDataSource.m; sourceTree = "<group>"; };
 		E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAssetsProtocol.h; sourceTree = "<group>"; };
 		E240B2161E48924800DCBB5F /* PRConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRConstants.h; sourceTree = "<group>"; };
+		E240B21A1E489DD100DCBB5F /* PRAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAPIClient.h; sourceTree = "<group>"; };
+		E240B21B1E489DD100DCBB5F /* PRAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRAPIClient.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,12 +71,22 @@
 				E240B2091E48904B00DCBB5F /* PRPhotosUtils.m */,
 				E240B20C1E48905A00DCBB5F /* PRAsset.h */,
 				E240B20D1E48905A00DCBB5F /* PRAsset.m */,
+				E240B2171E489B7F00DCBB5F /* datasource */,
+				E240B2161E48924800DCBB5F /* PRConstants.h */,
+				E240B21A1E489DD100DCBB5F /* PRAPIClient.h */,
+				E240B21B1E489DD100DCBB5F /* PRAPIClient.m */,
+			);
+			path = PrismRecorder;
+			sourceTree = "<group>";
+		};
+		E240B2171E489B7F00DCBB5F /* datasource */ = {
+			isa = PBXGroup;
+			children = (
 				E240B2101E4890CC00DCBB5F /* PRAssetsDataSource.h */,
 				E240B2111E4890CC00DCBB5F /* PRAssetsDataSource.m */,
 				E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */,
-				E240B2161E48924800DCBB5F /* PRConstants.h */,
 			);
-			path = PrismRecorder;
+			name = datasource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -84,6 +98,7 @@
 			files = (
 				E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */,
 				E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */,
+				E240B21C1E489DD100DCBB5F /* PRAPIClient.h in Headers */,
 				E240B20E1E48905A00DCBB5F /* PRAsset.h in Headers */,
 				E240B2121E4890CC00DCBB5F /* PRAssetsDataSource.h in Headers */,
 				E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */,
@@ -162,6 +177,7 @@
 				E240B20F1E48905A00DCBB5F /* PRAsset.m in Sources */,
 				E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */,
 				E240B2131E4890CC00DCBB5F /* PRAssetsDataSource.m in Sources */,
+				E240B21D1E489DD100DCBB5F /* PRAPIClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
