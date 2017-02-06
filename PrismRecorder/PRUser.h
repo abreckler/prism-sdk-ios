@@ -25,6 +25,6 @@
 
 - (void)configureWithData:(NSDictionary *)data;
 - (BOOL)hasToken;
-- (void)setToken:(NSString *)token;
+
 
 @end

@@ -58,14 +58,6 @@
     if (data[@"token"] && ![data[@"token"] isKindOfClass:[NSNull class]]) {
         _token = data[@"token"];
     }
-    
-    if (data[@"username"]) {
-        [[NSUserDefaults standardUserDefaults] setObject:data[@"username"] forKey:@"username"];
-    }
-}
-
-- (void)setDeviceToken:(NSString *)deviceToken {
-    _deviceToken = deviceToken;
 }
 
 - (BOOL)hasToken {
