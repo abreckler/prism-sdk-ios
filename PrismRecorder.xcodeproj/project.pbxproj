@@ -17,6 +17,11 @@
 		E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */; };
 		E240B21C1E489DD100DCBB5F /* PRAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B21A1E489DD100DCBB5F /* PRAPIClient.h */; };
 		E240B21D1E489DD100DCBB5F /* PRAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B21B1E489DD100DCBB5F /* PRAPIClient.m */; };
+		E240B21F1E48CABE00DCBB5F /* PrismRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B21E1E48CABE00DCBB5F /* PrismRecorder.m */; };
+		E240B2221E48CBFE00DCBB5F /* PRPost.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2201E48CBFE00DCBB5F /* PRPost.h */; };
+		E240B2231E48CBFE00DCBB5F /* PRPost.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2211E48CBFE00DCBB5F /* PRPost.m */; };
+		E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */; };
+		E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +38,11 @@
 		E240B2161E48924800DCBB5F /* PRConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PRConstants.h; sourceTree = "<group>"; };
 		E240B21A1E489DD100DCBB5F /* PRAPIClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRAPIClient.h; sourceTree = "<group>"; };
 		E240B21B1E489DD100DCBB5F /* PRAPIClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRAPIClient.m; sourceTree = "<group>"; };
+		E240B21E1E48CABE00DCBB5F /* PrismRecorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrismRecorder.m; sourceTree = "<group>"; };
+		E240B2201E48CBFE00DCBB5F /* PRPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRPost.h; sourceTree = "<group>"; };
+		E240B2211E48CBFE00DCBB5F /* PRPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPost.m; sourceTree = "<group>"; };
+		E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PrismUtils.h"; sourceTree = "<group>"; };
+		E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PrismUtils.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,15 +76,20 @@
 			isa = PBXGroup;
 			children = (
 				E240B2001E488D9A00DCBB5F /* PrismRecorder.h */,
+				E240B21E1E48CABE00DCBB5F /* PrismRecorder.m */,
 				E240B2011E488D9A00DCBB5F /* Info.plist */,
 				E240B2081E48904B00DCBB5F /* PRPhotosUtils.h */,
 				E240B2091E48904B00DCBB5F /* PRPhotosUtils.m */,
 				E240B20C1E48905A00DCBB5F /* PRAsset.h */,
 				E240B20D1E48905A00DCBB5F /* PRAsset.m */,
+				E240B2201E48CBFE00DCBB5F /* PRPost.h */,
+				E240B2211E48CBFE00DCBB5F /* PRPost.m */,
 				E240B2171E489B7F00DCBB5F /* datasource */,
 				E240B2161E48924800DCBB5F /* PRConstants.h */,
 				E240B21A1E489DD100DCBB5F /* PRAPIClient.h */,
 				E240B21B1E489DD100DCBB5F /* PRAPIClient.m */,
+				E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */,
+				E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */,
 			);
 			path = PrismRecorder;
 			sourceTree = "<group>";
@@ -97,6 +112,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */,
+				E240B2221E48CBFE00DCBB5F /* PRPost.h in Headers */,
+				E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */,
 				E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */,
 				E240B21C1E489DD100DCBB5F /* PRAPIClient.h in Headers */,
 				E240B20E1E48905A00DCBB5F /* PRAsset.h in Headers */,
@@ -174,6 +191,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E240B21F1E48CABE00DCBB5F /* PrismRecorder.m in Sources */,
+				E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */,
+				E240B2231E48CBFE00DCBB5F /* PRPost.m in Sources */,
 				E240B20F1E48905A00DCBB5F /* PRAsset.m in Sources */,
 				E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */,
 				E240B2131E4890CC00DCBB5F /* PRAssetsDataSource.m in Sources */,
@@ -291,6 +311,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = PrismRecorder/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.prism.PrismRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -309,6 +330,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = PrismRecorder/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.prism.PrismRecorder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
