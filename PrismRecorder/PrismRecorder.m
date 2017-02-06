@@ -67,7 +67,7 @@ static PrismRecorder *sharedManager = nil;
     
 }
 
-
+//http://stackoverflow.com/questions/10154958/ios-how-to-detect-shake-motion
 - (void)attachToWindow
 {
     if (self.mainWindow) return;
