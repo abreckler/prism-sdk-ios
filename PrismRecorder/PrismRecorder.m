@@ -11,16 +11,14 @@
 #import "PRConstants.h"
 #import "PRUser.h"
 #import "PRAPIClient.h"
-
-static NSMutableDictionary *_session;
-static NSString *_status;
+#import "NSString+PrismUtils.h"
 
 @interface PrismRecorder() <UIAlertViewDelegate>
 @property (strong, nonatomic) NSMutableArray *uploads;
 @property (strong, nonatomic) PRUser *currentUser;
 @property (nonatomic) PRPost *currentPost;
 @property (nonatomic) NSString *errorMessage;
-@property (strong) NSDictionary *finalPostData;
+@property (nonatomic, weak) UIWindow *mainWindow;
 @property (strong, nonatomic) PRAPIClient *apiClient;
 @end
 
@@ -42,13 +40,56 @@ static PrismRecorder *sharedManager = nil;
     return sharedManager;
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        _status = @"Disabled";
-        _currentPost = nil;
+- (void)enableWithClientId:(NSString*)clientId {
+    
+    NSAssert(clientId.isBlank, @"Client ID is missing.");
+    NSAssert(![[NSUUID alloc] initWithUUIDString:clientId], @"Client ID format is invalid. Double check and try again.");
+    
+    _currentPost = nil;
+    
+    _apiClient = [PRAPIClient new];
+    [_apiClient getAccountDetails:clientId completion:^(BOOL status, NSData *data, NSError *error) {
+        if (status) {
+            NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            BLog(@"account %@", accountDetails);
+            [_currentUser configureWithData:accountDetails];
+            self.errorMessage = @"";
+        } else {
+            NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
+        }
+    }];
+    
+    [self attachToWindow];
+    
+}
+
+
+- (void)attachToWindow
+{
+    if (self.mainWindow) return;
+    
+    self.mainWindow = UIApplication.sharedApplication.keyWindow;
+   
+    if (! self.mainWindow) {
+        self.mainWindow = UIApplication.sharedApplication.windows.lastObject;
     }
-    return self;
+    
+    NSAssert(!self.mainWindow, @"[PrismRecorder] Main application window is missing.");
+    
+    
+    if (!self.allSet) {
+        NSAssert(!self.mainWindow, @"[PrismRecorder] Main application windown is missing.");
+        return;
+    }
+    
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+}
+
+- (BOOL)allSet {
+    return  self.mainWindow && self.mainWindow.rootViewController;
 }
 
 

@@ -33,13 +33,7 @@ typedef void (^SendPostCompletionBlock)(BOOL success);
 //engine
 + (instancetype)sharedManager;
 - (void)sendPost:(NSDictionary*)postData completion:(SendPostCompletionBlock)completion;
-- (void)publishVideoJSON:(NSDictionary*)data;
-- (void)enablePublishing:(NSDictionary*)data;
 - (void)setCurrentPost:(PRPost *)currentPost;
-- (void)cancelRequests;
-
-+ (NSMutableDictionary *) sessionData;
-- (void)invalidateSession;
 
 
 @end
