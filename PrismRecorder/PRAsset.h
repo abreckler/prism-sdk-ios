@@ -9,7 +9,6 @@
 @import Foundation;
 @import Photos;
 #import "PRPhotosUtils.h"
-@class VideoAnnotation;
 
 typedef void (^PRAssetGetImage)(UIImage *image);
 typedef void (^PRAssetGetImageData)(NSData *imageData);
@@ -20,18 +19,8 @@ typedef void (^PRAssetGetPlayer)(AVPlayerItem *player);
 @interface PRAsset : NSObject
 
 @property (nonatomic, strong, readonly) PHAsset *phAsset;
-@property (nonatomic, strong) UIColor *cropColor;
-@property (nonatomic, strong) UIColor *drawColor;
-@property (nonatomic) CGFloat cropAlpha;
-@property (nonatomic) CGFloat drawAlpha;
 @property (nonatomic, strong) NSDictionary *textAttributes;
-@property (nonatomic) CLLocationCoordinate2D coordinates;
-@property (nonatomic, strong) NSArray *annotations;
-@property (nonatomic) CGRect croppedRect;
 @property (nonatomic) PRAssetType assetType;
-@property (nonatomic) PRAssetType originalAssetType;
-@property (nonatomic, readonly) VideoAnnotation *videoAnnotation;
-@property BOOL isCropped;
 @property BOOL shouldDelete;
 
 - (id)initWithPHAsset:(PHAsset*)asset;
