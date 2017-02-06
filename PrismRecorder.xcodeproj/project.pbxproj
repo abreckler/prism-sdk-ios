@@ -22,6 +22,8 @@
 		E240B2231E48CBFE00DCBB5F /* PRPost.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2211E48CBFE00DCBB5F /* PRPost.m */; };
 		E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */; };
 		E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */; };
+		E240B22C1E48D13000DCBB5F /* PRUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B22A1E48D13000DCBB5F /* PRUser.h */; };
+		E240B22D1E48D13000DCBB5F /* PRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B22B1E48D13000DCBB5F /* PRUser.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +45,8 @@
 		E240B2211E48CBFE00DCBB5F /* PRPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRPost.m; sourceTree = "<group>"; };
 		E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PrismUtils.h"; sourceTree = "<group>"; };
 		E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PrismUtils.m"; sourceTree = "<group>"; };
+		E240B22A1E48D13000DCBB5F /* PRUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRUser.h; sourceTree = "<group>"; };
+		E240B22B1E48D13000DCBB5F /* PRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRUser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +88,8 @@
 				E240B20D1E48905A00DCBB5F /* PRAsset.m */,
 				E240B2201E48CBFE00DCBB5F /* PRPost.h */,
 				E240B2211E48CBFE00DCBB5F /* PRPost.m */,
+				E240B22A1E48D13000DCBB5F /* PRUser.h */,
+				E240B22B1E48D13000DCBB5F /* PRUser.m */,
 				E240B2171E489B7F00DCBB5F /* datasource */,
 				E240B2161E48924800DCBB5F /* PRConstants.h */,
 				E240B21A1E489DD100DCBB5F /* PRAPIClient.h */,
@@ -111,6 +117,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E240B22C1E48D13000DCBB5F /* PRUser.h in Headers */,
 				E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */,
 				E240B2221E48CBFE00DCBB5F /* PRPost.h in Headers */,
 				E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */,
@@ -195,6 +202,7 @@
 				E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */,
 				E240B2231E48CBFE00DCBB5F /* PRPost.m in Sources */,
 				E240B20F1E48905A00DCBB5F /* PRAsset.m in Sources */,
+				E240B22D1E48D13000DCBB5F /* PRUser.m in Sources */,
 				E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */,
 				E240B2131E4890CC00DCBB5F /* PRAssetsDataSource.m in Sources */,
 				E240B21D1E489DD100DCBB5F /* PRAPIClient.m in Sources */,
