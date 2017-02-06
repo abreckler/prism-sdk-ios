@@ -12,4 +12,5 @@ typedef void (^PRClientCompletionBlock)(BOOL success, NSData *receivedData, NSEr
 
 @interface PRAPIClient : NSObject
 - (void)getAccountDetails:(NSString *)token completion:(PRClientCompletionBlock)completion;
+- (void)publishPost:(NSDictionary*)data forAccount:(NSString *)token completion:(PRClientCompletionBlock)completion;
 @end
