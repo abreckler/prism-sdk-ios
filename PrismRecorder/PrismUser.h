@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PRUser : NSObject
+@interface PrismUser : NSObject
 
 @property (nonatomic, copy, readonly) NSString *user_id;
 @property (nonatomic, copy, readonly) NSString *email;

@@ -24,8 +24,8 @@
 		E240B2231E48CBFE00DCBB5F /* PrismPost.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2211E48CBFE00DCBB5F /* PrismPost.m */; };
 		E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */; };
 		E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */; };
-		E240B22C1E48D13000DCBB5F /* PRUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B22A1E48D13000DCBB5F /* PRUser.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		E240B22D1E48D13000DCBB5F /* PRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B22B1E48D13000DCBB5F /* PRUser.m */; };
+		E240B22C1E48D13000DCBB5F /* PrismUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B22A1E48D13000DCBB5F /* PrismUser.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		E240B22D1E48D13000DCBB5F /* PrismUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B22B1E48D13000DCBB5F /* PrismUser.m */; };
 		E2B314B61E492D8600B63E4A /* PRVideoAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2B314B41E492D8600B63E4A /* PRVideoAnnotation.h */; };
 		E2B314B71E492D8600B63E4A /* PRVideoAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B314B51E492D8600B63E4A /* PRVideoAnnotation.m */; };
 /* End PBXBuildFile section */
@@ -51,8 +51,8 @@
 		E240B2211E48CBFE00DCBB5F /* PrismPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrismPost.m; sourceTree = "<group>"; };
 		E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PrismUtils.h"; sourceTree = "<group>"; };
 		E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PrismUtils.m"; sourceTree = "<group>"; };
-		E240B22A1E48D13000DCBB5F /* PRUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRUser.h; sourceTree = "<group>"; };
-		E240B22B1E48D13000DCBB5F /* PRUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRUser.m; sourceTree = "<group>"; };
+		E240B22A1E48D13000DCBB5F /* PrismUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrismUser.h; sourceTree = "<group>"; };
+		E240B22B1E48D13000DCBB5F /* PrismUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrismUser.m; sourceTree = "<group>"; };
 		E2B314B41E492D8600B63E4A /* PRVideoAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRVideoAnnotation.h; sourceTree = "<group>"; };
 		E2B314B51E492D8600B63E4A /* PRVideoAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRVideoAnnotation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -85,8 +85,8 @@
 				E240B20D1E48905A00DCBB5F /* PrismAsset.m */,
 				E240B2201E48CBFE00DCBB5F /* PrismPost.h */,
 				E240B2211E48CBFE00DCBB5F /* PrismPost.m */,
-				E240B22A1E48D13000DCBB5F /* PRUser.h */,
-				E240B22B1E48D13000DCBB5F /* PRUser.m */,
+				E240B22A1E48D13000DCBB5F /* PrismUser.h */,
+				E240B22B1E48D13000DCBB5F /* PrismUser.m */,
 				E240B21A1E489DD100DCBB5F /* PRAPIClient.h */,
 				E240B21B1E489DD100DCBB5F /* PRAPIClient.m */,
 			);
@@ -148,7 +148,7 @@
 				E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */,
 				E22A59EC1E4B2E31002911F6 /* PRWindow.h in Headers */,
 				E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */,
-				E240B22C1E48D13000DCBB5F /* PRUser.h in Headers */,
+				E240B22C1E48D13000DCBB5F /* PrismUser.h in Headers */,
 				E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */,
 				E240B2221E48CBFE00DCBB5F /* PrismPost.h in Headers */,
 				E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */,
@@ -232,7 +232,7 @@
 				E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */,
 				E240B2231E48CBFE00DCBB5F /* PrismPost.m in Sources */,
 				E240B20F1E48905A00DCBB5F /* PrismAsset.m in Sources */,
-				E240B22D1E48D13000DCBB5F /* PRUser.m in Sources */,
+				E240B22D1E48D13000DCBB5F /* PrismUser.m in Sources */,
 				E22A59ED1E4B2E31002911F6 /* PRWindow.m in Sources */,
 				E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */,
 				E2B314B71E492D8600B63E4A /* PRVideoAnnotation.m in Sources */,

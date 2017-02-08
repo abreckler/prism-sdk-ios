@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PrismRecorder.h"
 #import "PRConstants.h"
-#import "PRUser.h"
+#import "PrismUser.h"
 #import "PRAPIClient.h"
 #import "PRVideoAnnotation.h"
 #import "NSString+PrismUtils.h"
@@ -18,7 +18,7 @@
 @import ReplayKit;
 
 @interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
-@property (strong, nonatomic) PRUser *currentUser;
+@property (strong, nonatomic) PrismUser *currentUser;
 @property (nonatomic) PrismPost *currentPost;
 @property (nonatomic) NSString *errorMessage;
 @property (strong, nonatomic) PRAPIClient *apiClient;

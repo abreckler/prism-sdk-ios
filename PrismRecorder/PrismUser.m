@@ -6,10 +6,10 @@
 //  Copyright © 2017 prism. All rights reserved.
 //
 
-#import "PRUser.h"
+#import "PrismUser.h"
 
 
-@interface PRUser()
+@interface PrismUser()
 
 @property (nonatomic, copy) NSString *user_id;
 @property (nonatomic, copy) NSString *email;
@@ -24,7 +24,7 @@
 @property (nonatomic, copy) NSString *token;
 @end
 
-@implementation PRUser
+@implementation PrismUser
 
 - (instancetype)init {
     self = [super init];
