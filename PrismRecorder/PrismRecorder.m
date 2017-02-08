@@ -84,12 +84,14 @@ CFTimeInterval bln_startTime;
     if (! self.mainWindow) {
         self.mainWindow = UIApplication.sharedApplication.windows.lastObject;
     }
+   
+    BLog(@"sharedApp is %@", UIApplication.sharedApplication.keyWindow.description);
     
-    NSAssert(!self.mainWindow, @"[PrismRecorder] Main application window is missing.");
+    NSAssert(self.mainWindow, @"[PrismRecorder] Main application window is missing.");
     
     
     if (!self.allSet) {
-        NSAssert(!self.mainWindow, @"[PrismRecorder] Main application windown is missing.");
+        NSAssert(self.allSet, @"[PrismRecorder] Main application window is missing.");
         return;
     }
     

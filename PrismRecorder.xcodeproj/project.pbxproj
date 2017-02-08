@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		E22A59EC1E4B2E31002911F6 /* PRWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = E22A59EA1E4B2E31002911F6 /* PRWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E22A59ED1E4B2E31002911F6 /* PRWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E22A59EB1E4B2E31002911F6 /* PRWindow.m */; };
+		E22A5A091E4B6C8E002911F6 /* UIWindow+Prism.h in Headers */ = {isa = PBXBuildFile; fileRef = E22A5A071E4B6C8E002911F6 /* UIWindow+Prism.h */; };
+		E22A5A0A1E4B6C8E002911F6 /* UIWindow+Prism.m in Sources */ = {isa = PBXBuildFile; fileRef = E22A5A081E4B6C8E002911F6 /* UIWindow+Prism.m */; };
 		E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2001E488D9A00DCBB5F /* PrismRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2081E48904B00DCBB5F /* PRPhotosUtils.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2091E48904B00DCBB5F /* PRPhotosUtils.m */; };
@@ -33,6 +35,8 @@
 /* Begin PBXFileReference section */
 		E22A59EA1E4B2E31002911F6 /* PRWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRWindow.h; sourceTree = "<group>"; };
 		E22A59EB1E4B2E31002911F6 /* PRWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRWindow.m; sourceTree = "<group>"; };
+		E22A5A071E4B6C8E002911F6 /* UIWindow+Prism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWindow+Prism.h"; sourceTree = "<group>"; };
+		E22A5A081E4B6C8E002911F6 /* UIWindow+Prism.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWindow+Prism.m"; sourceTree = "<group>"; };
 		E240B1FD1E488D9A00DCBB5F /* PrismRecorder.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PrismRecorder.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E240B2001E488D9A00DCBB5F /* PrismRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrismRecorder.h; sourceTree = "<group>"; };
 		E240B2011E488D9A00DCBB5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -72,6 +76,8 @@
 			isa = PBXGroup;
 			children = (
 				E240B2161E48924800DCBB5F /* PRConstants.h */,
+				E22A5A071E4B6C8E002911F6 /* UIWindow+Prism.h */,
+				E22A5A081E4B6C8E002911F6 /* UIWindow+Prism.m */,
 				E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */,
 				E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */,
 			);
@@ -155,6 +161,7 @@
 				E240B21C1E489DD100DCBB5F /* PRAPIClient.h in Headers */,
 				E240B20E1E48905A00DCBB5F /* PrismAsset.h in Headers */,
 				E240B2121E4890CC00DCBB5F /* PRAssetsDataSource.h in Headers */,
+				E22A5A091E4B6C8E002911F6 /* UIWindow+Prism.h in Headers */,
 				E2B314B61E492D8600B63E4A /* PRVideoAnnotation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,6 +239,7 @@
 				E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */,
 				E240B2231E48CBFE00DCBB5F /* PrismPost.m in Sources */,
 				E240B20F1E48905A00DCBB5F /* PrismAsset.m in Sources */,
+				E22A5A0A1E4B6C8E002911F6 /* UIWindow+Prism.m in Sources */,
 				E240B22D1E48D13000DCBB5F /* PrismUser.m in Sources */,
 				E22A59ED1E4B2E31002911F6 /* PRWindow.m in Sources */,
 				E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */,
