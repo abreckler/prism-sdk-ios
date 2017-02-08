@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 @import Photos;
 #import "PRAssetsDataSource.h"
-@class PRAsset;
+@class PrismAsset;
 
 typedef void (^VoidBlock)();
 typedef enum {
@@ -19,7 +19,7 @@ typedef enum {
 } PRPhotoLibraryPermissionStatus;
 
 
-typedef NS_ENUM(NSInteger, PRAssetType)  {
+typedef NS_ENUM(NSInteger, PrismAssetType)  {
     PRAllAssets,
     PRScreenshots,
     PRVideos,
@@ -31,15 +31,15 @@ typedef NS_ENUM(NSInteger, PRAssetType)  {
 
 typedef void (^PRPhotoLibraryAccessHandler)(PRPhotoLibraryPermissionStatus status);
 typedef void (^PRPhotoLibraryGetImagesBlock)(NSArray *assets);
-typedef void (^PRPhotoLibraryGetLatestAssetBlock)(PRAsset *asset);
+typedef void (^PRPhotoLibraryGetLatestAssetBlock)(PrismAsset *asset);
 typedef void (^PRPhotoLibraryCompletionBlock)(BOOL success);
-typedef void (^PRPhotoLibraryCreationBlock)(BOOL success, PRAsset *asset, NSError *error);
+typedef void (^PRPhotoLibraryCreationBlock)(BOOL success, PrismAsset *asset, NSError *error);
 typedef void (^PRPhotoLibraryAlbumCreationBlock)(BOOL success, PHAssetCollection *assetCollection, NSError *error);
 
 @interface PRPhotosUtils : NSObject
 
 @property (nonatomic) id <PRAssetsProtocol> assetsDataSource;
-@property (nonatomic) PRAssetType assetsType;
+@property (nonatomic) PrismAssetType assetsType;
 
 
 // Permissions
@@ -57,7 +57,7 @@ typedef void (^PRPhotoLibraryAlbumCreationBlock)(BOOL success, PHAssetCollection
 - (void)saveImageToLibrary:(UIImage *)image completion:(PRPhotoLibraryCreationBlock)completion;
 - (void)saveVideoToLibrary:(NSURL *)videoURL completion:(PRPhotoLibraryCreationBlock)completion;
 - (void)saveFileToLibrary:(NSURL *)fileURL completion:(PRPhotoLibraryCreationBlock)completion;
-- (void)replaceAssetInLibrary:(PRAsset *)asset forAssetType:(PRAssetType)assetType usingOptions:(NSDictionary*)replacementData completion:(PRPhotoLibraryCreationBlock)completion;
+- (void)replaceAssetInLibrary:(PRAsset *)asset forAssetType:(PrismAssetType)assetType usingOptions:(NSDictionary*)replacementData completion:(PRPhotoLibraryCreationBlock)completion;
 - (void)revertAssetToOriginal:(PRAsset *)asset completion:(PRPhotoLibraryCreationBlock)completion;
 
 

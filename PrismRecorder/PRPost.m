@@ -24,7 +24,7 @@
 @property (nonatomic, copy) NSDate *creation_date;
 @property (nonatomic, copy) NSString *post_url;
 @property (nonatomic, copy) NSString *image_filename;
-@property (nonatomic) PRAssetType contentType;
+@property (nonatomic) PrismAssetType contentType;
 @property (nonatomic) BOOL didUpvote;
 @property (nonatomic) BOOL isPrivate;
 @property (nonatomic) BOOL isProcessed;
@@ -92,7 +92,7 @@
         contentType = 1;
     }
     
-    currentPost.contentType = (PRAssetType) contentType;
+    currentPost.contentType = (PrismAssetType) contentType;
     
     return currentPost;
 }
@@ -151,12 +151,12 @@
         contentType = 1;
     }
     
-    _contentType = (PRAssetType) contentType;
+    _contentType = (PrismAssetType) contentType;
     
 }
 
 
-+ (instancetype)createWithAsset:(PRAsset *)asset {
++ (instancetype)createWithAsset:(PrismAsset *)asset {
     PRPost *currentPost = [PRPost new];
     currentPost.post_asset = asset;
     currentPost.image_filename = asset.phAsset.localIdentifier;
@@ -167,7 +167,7 @@
 #pragma mark -
 #pragma mark - Getters
 
-- (PRAssetType)contentType {
+- (PrismAssetType)contentType {
     if (self.post_asset) {
         _contentType = self.post_asset.assetType;
     }
@@ -210,7 +210,7 @@
 #pragma mark -
 #pragma mark - Setters
 
-- (void)setPost_asset:(PRAsset *)post_asset {
+- (void)setPost_asset:(PrismAsset *)post_asset {
     _post_asset = post_asset;
     _image_filename = post_asset.phAsset.localIdentifier;
 }

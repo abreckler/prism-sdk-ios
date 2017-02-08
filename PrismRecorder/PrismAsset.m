@@ -6,11 +6,11 @@
 //  Copyright © 2017 prism. All rights reserved.
 //
 
-#import "PRAsset.h"
+#import "PrismAsset.h"
 #import "PRPhotosUtils.h"
 #import "PRConstants.h"
 
-@interface PRAsset ()
+@interface PrismAsset ()
 
 @property (nonatomic, strong) UIImage *cachedThumbnail;
 @property (nonatomic, strong) NSData *cachedData;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation PRAsset
+@implementation PrismAsset
 
 
 - (id)initWithPHAsset:(PHAsset *)asset {
@@ -54,7 +54,7 @@
     return self;
 }
 
-- (id)initWithFile:(NSURL*)file andType:(PRAssetType)assetType {
+- (id)initWithFile:(NSURL*)file andType:(PrismAssetType)assetType {
     self = [super init];
     if (self) {
         self.cachedThumbnail = [UIImage imageWithContentsOfFile:file.path];
@@ -64,7 +64,7 @@
     return self;
 }
 
-- (id)initWithImageData:(NSData*)imageData andType:(PRAssetType)assetType {
+- (id)initWithImageData:(NSData*)imageData andType:(PrismAssetType)assetType {
     self = [super init];
     if (self) {
         self.cachedThumbnail = [UIImage imageWithData:imageData];

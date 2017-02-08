@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PRAsset.h"
+#import "PrismAsset.h"
 
 
 @interface PRPost : NSObject
@@ -25,18 +25,18 @@
 @property (nonatomic, copy, readonly) NSDate *creation_date;
 @property (nonatomic, copy, readonly) NSString *image_filename;
 @property (nonatomic, copy, readonly) NSString *post_url;
-@property (nonatomic, readonly) PRAssetType contentType;
+@property (nonatomic, readonly) PrismAssetType contentType;
 @property (nonatomic, readonly) BOOL isPrivate;
 @property (nonatomic, readonly) BOOL isProcessed;
 @property (nonatomic, readonly) BOOL isPublished;
-@property (nonatomic, copy) PRAsset *post_asset;
+@property (nonatomic, copy) PrismAsset *post_asset;
 @property (nonatomic) UIImage *finalImage;
 @property (nonatomic) NSData *finalData;
 @property (nonatomic) UIImage *originalImage;
 @property (nonatomic) NSString *videoPath;
 
 + (instancetype)initWithData:(NSDictionary *)data;
-+ (instancetype)createWithAsset:(PRAsset *)asset;
++ (instancetype)createWithAsset:(PrismAsset *)asset;
 
 
 //Setters

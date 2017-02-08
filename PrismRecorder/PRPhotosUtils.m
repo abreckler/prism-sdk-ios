@@ -7,7 +7,7 @@
 //
 
 #import "PRPhotosUtils.h"
-#import "PRAsset.h"
+#import "PrismAsset.h"
 #import "PRConstants.h"
 
 @interface PRPhotosUtils() // <PHPhotoLibraryChangeObserver>
@@ -43,7 +43,7 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
     
     NSMutableArray *assetsResult = [[NSMutableArray alloc] init];
     [_assetsFetchResults enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx2, BOOL *stop2) {
-        [assetsResult addObject:[[PRAsset alloc] initWithPHAsset:asset]];
+        [assetsResult addObject:[[PrismAsset alloc] initWithPHAsset:asset]];
     }];
     
     self.assetsDataSource = [[PRAssetsDataSource alloc] initWithAssets:assetsResult];
@@ -89,7 +89,7 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
                 
                 
                 if (valid) {
-                    [assetsResult addObject:[[PRAsset alloc] initWithPHAsset:asset]];
+                    [assetsResult addObject:[[PrismAsset alloc] initWithPHAsset:asset]];
                 }
                 
                 
@@ -126,7 +126,7 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
             
             if (!latest.hidden) {
                 [self executeInMainThread:^{
-                    if (completion) completion([[PRAsset alloc] initWithPHAsset:latest]);
+                    if (completion) completion([[PrismAsset alloc] initWithPHAsset:latest]);
                 }];
             }
         }
@@ -153,7 +153,7 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
             
             if (!latest.hidden) {
                 [self executeInMainThread:^{
-                    if (completion) completion([[PRAsset alloc] initWithPHAsset:latest]);
+                    if (completion) completion([[PrismAsset alloc] initWithPHAsset:latest]);
                 }];
             }
         }
@@ -211,12 +211,12 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
                 [changeRequest addAssets:@[placeholder]];
                 
             } completionHandler:^(BOOL success, NSError *error) {
-                PRAsset *savedAsset;
+                PrismAsset *savedAsset;
                 if ( !success )
                     NSLog( @"Could not save Image to photo library: %@", error );
                 else {
                     PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[placeholder.localIdentifier] options:nil];
-                    savedAsset = [[PRAsset alloc] initWithPHAsset:assetResult.firstObject];
+                    savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
                 }
                 if (completion)
                     completion(success, savedAsset, error);
@@ -256,12 +256,12 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
                 PHAssetCollectionChangeRequest *changeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:blinkCollection assets:blinkAssets];
                 [changeRequest addAssets:@[placeholder]];
             } completionHandler:^( BOOL success, NSError *error ) {
-                PRAsset *savedAsset;
+                PrismAsset *savedAsset;
                 if ( !success ) {
                     NSLog( @"Could not save file to photo library: %@", error );
                 } else {
                     PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[placeholder.localIdentifier] options:nil];
-                    savedAsset = [[PRAsset alloc] initWithPHAsset:assetResult.firstObject];
+                    savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
                 }
                 if (completion)
                     completion(success, savedAsset, error);
@@ -307,12 +307,12 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
                 PHAssetCollectionChangeRequest *changeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:blinkCollection assets:blinkAssets];
                 [changeRequest addAssets:@[placeholder]];
             } completionHandler:^( BOOL success, NSError *error ) {
-                PRAsset *savedAsset;
+                PrismAsset *savedAsset;
                 if ( !success ) {
                     NSLog( @"Could not save video to photo library: %@", error );
                 } else {
                     PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[placeholder.localIdentifier] options:nil];
-                    savedAsset = [[PRAsset alloc] initWithPHAsset:assetResult.firstObject];
+                    savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
                 }
                 if (completion)
                     completion(success, savedAsset, error);
@@ -328,7 +328,7 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
     }];
 }
 
-- (void)replaceAssetInLibrary:(PRAsset *)asset forAssetType:(PRAssetType)assetType usingOptions:(NSDictionary*)replacementData completion:(PRPhotoLibraryCreationBlock)completion {
+- (void)replaceAssetInLibrary:(PrismAsset *)asset forAssetType:(PrismAssetType)assetType usingOptions:(NSDictionary*)replacementData completion:(PRPhotoLibraryCreationBlock)completion {
     
     // Only allow editing if the PHAsset supports edit operations and it is not a Live Photo.
     BLog(@"editable? %@", NSStringFromBool([asset.phAsset canPerformEditOperation:PHAssetEditOperationContent]));
@@ -369,13 +369,13 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
                     request.contentEditingOutput = contentEditingOutput;
                     
                 } completionHandler:^(BOOL success, NSError *error) {
-                    PRAsset *savedAsset;
+                    PrismAsset *savedAsset;
                     
                     BLog(@"saved? %@", NSStringFromBool(success));
                     
                     if (success) {
                         PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[asset.phAsset.localIdentifier] options:nil];
-                        savedAsset = [[PRAsset alloc] initWithPHAsset:assetResult.firstObject];
+                        savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
                     }
                     
                     if (completion)
@@ -389,18 +389,18 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
     }
 }
 
-- (void)revertAssetToOriginal:(PRAsset *)asset completion:(PRPhotoLibraryCreationBlock)completion {
+- (void)revertAssetToOriginal:(PrismAsset *)asset completion:(PRPhotoLibraryCreationBlock)completion {
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
         PHAssetChangeRequest *request = [PHAssetChangeRequest changeRequestForAsset:asset.phAsset];
         [request revertAssetContentToOriginal];
     } completionHandler:^(BOOL success, NSError *error) {
-        PRAsset *savedAsset;
+        PrismAsset *savedAsset;
         
         BLog(@"reverted? %@", NSStringFromBool(success));
         
         if (success) {
             PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[asset.phAsset.localIdentifier] options:nil];
-            savedAsset = [[PRAsset alloc] initWithPHAsset:assetResult.firstObject];
+            savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
         }
         
         if (completion)

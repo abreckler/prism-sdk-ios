@@ -16,16 +16,16 @@ typedef void (^PRAssetGetAssetURL)(NSString *assetURL);
 typedef void (^PRAssetGetVideoAsset)(AVAsset *avasset);
 typedef void (^PRAssetGetPlayer)(AVPlayerItem *player);
 
-@interface PRAsset : NSObject
+@interface PrismAsset : NSObject
 
 @property (nonatomic, strong, readonly) PHAsset *phAsset;
 @property (nonatomic, strong) NSDictionary *textAttributes;
-@property (nonatomic) PRAssetType assetType;
+@property (nonatomic) PrismAssetType assetType;
 @property BOOL shouldDelete;
 
 - (id)initWithPHAsset:(PHAsset*)asset;
-- (id)initWithImageData:(NSData*)imageData andType:(PRAssetType)assetType;
-- (id)initWithFile:(NSURL*)file andType:(PRAssetType)assetType;
+- (id)initWithImageData:(NSData*)imageData andType:(PrismAssetType)assetType;
+- (id)initWithFile:(NSURL*)file andType:(PrismAssetType)assetType;
 - (void)setCachedAVAsset:(AVAsset *)cachedAVAsset;
 
 - (void)getThumbnail:(PRAssetGetImage)result size:(CGSize)size;
