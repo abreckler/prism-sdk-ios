@@ -36,7 +36,7 @@ static PrismRecorder *sharedManager = nil;
 
 
 BOOL isShowing;
-NSTimer *recordingTimer;
+//NSTimer *recordingTimer;
 CFTimeInterval bln_startTime;
 
 
@@ -51,8 +51,8 @@ CFTimeInterval bln_startTime;
 
 - (void)enableWithClientId:(NSString*)clientId {
     
-    NSAssert(clientId.isBlank, @"Client ID is missing.");
-    NSAssert(![[NSUUID alloc] initWithUUIDString:clientId], @"Client ID format is invalid. Double check and try again.");
+    NSAssert(!clientId.isBlank, @"Client ID is missing.");
+    //NSAssert([[NSUUID alloc] initWithUUIDString:clientId], @"Client ID format is invalid. Double check and try again.");
     
     _currentPost = nil;
     
@@ -107,7 +107,7 @@ CFTimeInterval bln_startTime;
 
 #pragma mark - Recording
 
-- (void)handleShakeMotion {
+- (void)updateRecording {
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
         NSDate.date.timeIntervalSince1970 - self.applicationActivatedAtTime > 1.5)
     {
@@ -205,12 +205,8 @@ CFTimeInterval bln_startTime;
         [_videoAnnotation updateUIWithRecordingState:sharedRecorder.recording];
         
         [_videoAnnotation setProgress:0];
-        if (recordingTimer) {
-            [recordingTimer invalidate];
-            recordingTimer = nil;
-        }
         bln_startTime = CACurrentMediaTime();
-        recordingTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateProgress) userInfo:nil repeats:YES];
+        [self performSelector:@selector(updateProgress) withObject:nil afterDelay:1.0];
     };
     
     UIAlertController *alertController = [UIAlertController
@@ -296,9 +292,6 @@ CFTimeInterval bln_startTime;
     if (!sharedRecorder.isRecording)
         return;
     
-    [recordingTimer invalidate];
-    recordingTimer = nil;
-    
     [sharedRecorder stopRecordingWithHandler:^(RPPreviewViewController *previewViewController, NSError *error) {
         _videoAnnotation.userInteractionEnabled = sharedRecorder.isRecording;
         [_videoAnnotation updateUIWithRecordingState:sharedRecorder.recording];
@@ -318,9 +311,13 @@ CFTimeInterval bln_startTime;
 
 - (void)updateProgress
 {
-    
+    BLog();
+    if (!RPScreenRecorder.sharedRecorder.isRecording)
+        return;
     CFTimeInterval elapsedTime = CACurrentMediaTime() - bln_startTime;
     [_videoAnnotation setProgress:elapsedTime];
+   
+    [self performSelector:@selector(updateProgress) withObject:nil afterDelay:1.0];
 }
 
 - (void)discardRecording {
@@ -360,6 +357,10 @@ CFTimeInterval bln_startTime;
 - (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
 {
     [previewController dismissViewControllerAnimated:YES completion:nil];
+    
+    //TODO: get latest video
+    
+    
 }
 
 #pragma mark - PBJVisionDelegate

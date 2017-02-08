@@ -23,7 +23,7 @@ typedef void (^SendPostCompletionBlock)(BOOL success);
 //engine
 + (instancetype)sharedManager;
 - (void)sendPost:(NSDictionary*)postData completion:(SendPostCompletionBlock)completion;
-- (void)handleShakeMotion;
-- (void)attachToWindow;
+- (void)enableWithClientId:(NSString*)clientId;
+- (void)updateRecording;
 
 @end

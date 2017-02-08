@@ -53,7 +53,7 @@
     
     if (event.subtype == UIEventSubtypeMotionShake)
     {
-        [[PrismRecorder sharedManager] handleShakeMotion];
+        [[PrismRecorder sharedManager] updateRecording];
     }
 }
 
