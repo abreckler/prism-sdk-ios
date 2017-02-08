@@ -17,6 +17,8 @@
 #import "PrismPost.h"
 @import ReplayKit;
 
+NSString* const UserDefaultsKey = @"io.prism.recorder.client";
+
 @interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
 @property (strong, nonatomic) PrismUser *currentUser;
 @property (nonatomic) PrismPost *currentPost;
@@ -52,6 +54,8 @@ CFTimeInterval bln_startTime;
     NSAssert(!clientId.isBlank, @"Client ID is missing.");
     //NSAssert([[NSUUID alloc] initWithUUIDString:clientId], @"Client ID format is invalid. Double check and try again.");
     
+    [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:UserDefaultsKey];
+    
     _currentPost = nil;
     
     _apiClient = [PRAPIClient new];
@@ -60,6 +64,7 @@ CFTimeInterval bln_startTime;
             NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             BLog(@"account %@", accountDetails);
             [_currentUser configureWithData:accountDetails];
+            
             self.errorMessage = @"";
         } else {
             NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -69,11 +74,10 @@ CFTimeInterval bln_startTime;
     }];
     
     [self attachToWindow];
-    
 }
 
-//http://stackoverflow.com/questions/10154958/ios-how-to-detect-shake-motion
-//http://stackoverflow.com/questions/19131957/ios-motion-detection-motion-detection-sensitivity-levels
+
+
 - (void)attachToWindow
 {
     if (self.mainWindow) return;
@@ -111,7 +115,7 @@ CFTimeInterval bln_startTime;
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
         NSDate.date.timeIntervalSince1970 - self.applicationActivatedAtTime > 1.5)
     {
-        if (self.shouldRecord) {
+        if (!self.shouldRecord) {
             return;
         }
     }
@@ -304,13 +308,18 @@ CFTimeInterval bln_startTime;
             self.previewViewController.modalPresentationStyle = UIModalPresentationFullScreen;
             [self.currentViewController presentViewController:self.previewViewController animated:YES completion:nil];
         }
+        
+        for (UIView *subview in self.previewViewController.view.subviews) {
+            BLog(@"%@", subview.class);
+
+        }
     }];
     
 }
 
 - (void)updateProgress
 {
-    BLog();
+   // BLog();
     if (!RPScreenRecorder.sharedRecorder.isRecording)
         return;
     CFTimeInterval elapsedTime = CACurrentMediaTime() - bln_startTime;
@@ -343,6 +352,8 @@ CFTimeInterval bln_startTime;
     if (previewViewController) {
         self.previewViewController = previewViewController;
     }
+    
+   
 }
 
 - (void)screenRecorderDidChangeAvailability:(RPScreenRecorder *)screenRecorder
