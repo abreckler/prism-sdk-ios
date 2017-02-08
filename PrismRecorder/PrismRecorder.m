@@ -13,6 +13,8 @@
 #import "PRAPIClient.h"
 #import "PRVideoAnnotation.h"
 #import "NSString+PrismUtils.h"
+#import "PRPhotosUtils.h"
+#import "PRPost.h"
 @import ReplayKit;
 
 @interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
@@ -24,6 +26,8 @@
 @property (nonatomic) NSTimeInterval applicationActivatedAtTime;
 @property (nonatomic, strong) PRVideoAnnotation *videoAnnotation;
 @property (weak, nonatomic) RPPreviewViewController *previewViewController;
+
+- (void)setCurrentPost:(PRPost *)currentPost;
 @end
 
 static PrismRecorder *sharedManager = nil;

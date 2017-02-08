@@ -7,24 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E22A59EC1E4B2E31002911F6 /* PRWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = E22A59EA1E4B2E31002911F6 /* PRWindow.h */; };
+		E22A59EC1E4B2E31002911F6 /* PRWindow.h in Headers */ = {isa = PBXBuildFile; fileRef = E22A59EA1E4B2E31002911F6 /* PRWindow.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E22A59ED1E4B2E31002911F6 /* PRWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E22A59EB1E4B2E31002911F6 /* PRWindow.m */; };
 		E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2001E488D9A00DCBB5F /* PrismRecorder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2081E48904B00DCBB5F /* PRPhotosUtils.h */; };
+		E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2081E48904B00DCBB5F /* PRPhotosUtils.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E240B20B1E48904B00DCBB5F /* PRPhotosUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2091E48904B00DCBB5F /* PRPhotosUtils.m */; };
 		E240B20E1E48905A00DCBB5F /* PRAsset.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B20C1E48905A00DCBB5F /* PRAsset.h */; };
 		E240B20F1E48905A00DCBB5F /* PRAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B20D1E48905A00DCBB5F /* PRAsset.m */; };
 		E240B2121E4890CC00DCBB5F /* PRAssetsDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2101E4890CC00DCBB5F /* PRAssetsDataSource.h */; };
 		E240B2131E4890CC00DCBB5F /* PRAssetsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2111E4890CC00DCBB5F /* PRAssetsDataSource.m */; };
-		E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */; };
+		E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E240B21C1E489DD100DCBB5F /* PRAPIClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B21A1E489DD100DCBB5F /* PRAPIClient.h */; };
 		E240B21D1E489DD100DCBB5F /* PRAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B21B1E489DD100DCBB5F /* PRAPIClient.m */; };
 		E240B21F1E48CABE00DCBB5F /* PrismRecorder.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B21E1E48CABE00DCBB5F /* PrismRecorder.m */; };
-		E240B2221E48CBFE00DCBB5F /* PRPost.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2201E48CBFE00DCBB5F /* PRPost.h */; };
+		E240B2221E48CBFE00DCBB5F /* PRPost.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2201E48CBFE00DCBB5F /* PRPost.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E240B2231E48CBFE00DCBB5F /* PRPost.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2211E48CBFE00DCBB5F /* PRPost.m */; };
 		E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B2261E48D01700DCBB5F /* NSString+PrismUtils.h */; };
 		E240B2291E48D01700DCBB5F /* NSString+PrismUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B2271E48D01700DCBB5F /* NSString+PrismUtils.m */; };
-		E240B22C1E48D13000DCBB5F /* PRUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B22A1E48D13000DCBB5F /* PRUser.h */; };
+		E240B22C1E48D13000DCBB5F /* PRUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E240B22A1E48D13000DCBB5F /* PRUser.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		E240B22D1E48D13000DCBB5F /* PRUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B22B1E48D13000DCBB5F /* PRUser.m */; };
 		E2B314B61E492D8600B63E4A /* PRVideoAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2B314B41E492D8600B63E4A /* PRVideoAnnotation.h */; };
 		E2B314B71E492D8600B63E4A /* PRVideoAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B314B51E492D8600B63E4A /* PRVideoAnnotation.m */; };
@@ -129,16 +129,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */,
+				E22A59EC1E4B2E31002911F6 /* PRWindow.h in Headers */,
+				E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */,
 				E240B22C1E48D13000DCBB5F /* PRUser.h in Headers */,
 				E240B2151E48910D00DCBB5F /* PRAssetsProtocol.h in Headers */,
 				E240B2221E48CBFE00DCBB5F /* PRPost.h in Headers */,
-				E22A59EC1E4B2E31002911F6 /* PRWindow.h in Headers */,
 				E240B2281E48D01700DCBB5F /* NSString+PrismUtils.h in Headers */,
-				E240B2021E488D9A00DCBB5F /* PrismRecorder.h in Headers */,
 				E240B21C1E489DD100DCBB5F /* PRAPIClient.h in Headers */,
 				E240B20E1E48905A00DCBB5F /* PRAsset.h in Headers */,
 				E240B2121E4890CC00DCBB5F /* PRAssetsDataSource.h in Headers */,
-				E240B20A1E48904B00DCBB5F /* PRPhotosUtils.h in Headers */,
 				E2B314B61E492D8600B63E4A /* PRVideoAnnotation.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
