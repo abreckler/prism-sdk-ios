@@ -1,16 +1,16 @@
 //
-//  PRPost.m
+//  PrismPost.m
 //  PrismRecorder
 //
 //  Created by Ahmed Bouchfaa on 2/6/17.
 //  Copyright © 2017 prism. All rights reserved.
 //
 
-#import "PRPost.h"
+#import "PrismPost.h"
 #import "PRConstants.h"
 #import "NSString+PrismUtils.h"
 
-@interface PRPost()
+@interface PrismPost()
 @property (nonatomic, copy) NSString *post_id;
 @property (nonatomic, copy) NSString *post_uuid;
 @property (nonatomic, copy) NSURL *post_image;
@@ -31,11 +31,11 @@
 @property (nonatomic) BOOL isPublished;
 @end
 
-@implementation PRPost
+@implementation PrismPost
 
 + (instancetype)initWithData:(NSDictionary *)data {
     //   BLog(@"%@", data);
-    PRPost *currentPost = [PRPost new];
+    PrismPost *currentPost = [PrismPost new];
     
     currentPost.post_uuid = data[@"uuid"];
     currentPost.post_id = data[@"id"];
@@ -157,7 +157,7 @@
 
 
 + (instancetype)createWithAsset:(PrismAsset *)asset {
-    PRPost *currentPost = [PRPost new];
+    PrismPost *currentPost = [PrismPost new];
     currentPost.post_asset = asset;
     currentPost.image_filename = asset.phAsset.localIdentifier;
     return  currentPost;

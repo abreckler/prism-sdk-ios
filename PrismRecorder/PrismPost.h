@@ -10,7 +10,7 @@
 #import "PrismAsset.h"
 
 
-@interface PRPost : NSObject
+@interface PrismPost : NSObject
 
 @property (nonatomic, copy, readonly) NSString *post_id;
 @property (nonatomic, copy, readonly) NSString *post_uuid;

@@ -14,12 +14,12 @@
 #import "PRVideoAnnotation.h"
 #import "NSString+PrismUtils.h"
 #import "PRPhotosUtils.h"
-#import "PRPost.h"
+#import "PrismPost.h"
 @import ReplayKit;
 
 @interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
 @property (strong, nonatomic) PRUser *currentUser;
-@property (nonatomic) PRPost *currentPost;
+@property (nonatomic) PrismPost *currentPost;
 @property (nonatomic) NSString *errorMessage;
 @property (strong, nonatomic) PRAPIClient *apiClient;
 @property (nonatomic, weak) UIWindow *mainWindow;
@@ -27,7 +27,7 @@
 @property (nonatomic, strong) PRVideoAnnotation *videoAnnotation;
 @property (weak, nonatomic) RPPreviewViewController *previewViewController;
 
-- (void)setCurrentPost:(PRPost *)currentPost;
+- (void)setCurrentPost:(PrismPost *)currentPost;
 @end
 
 static PrismRecorder *sharedManager = nil;
@@ -518,7 +518,7 @@ CFTimeInterval bln_startTime;
 }
 
 
-- (void)setCurrentPost:(PRPost *)currentPost {
+- (void)setCurrentPost:(PrismPost *)currentPost {
     _currentPost = currentPost;
 }
 
