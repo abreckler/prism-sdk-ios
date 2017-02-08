@@ -9,17 +9,18 @@
 #import <UIKit/UIKit.h>
 @import AVFoundation;
 
-@protocol VideoAnnotationDelegate<NSObject>
+@protocol PRVideoAnnotationDelegate<NSObject>
 - (void)handleTap;
 @end
 
 @interface PRVideoAnnotation : UIView <UIGestureRecognizerDelegate>
 
-@property (nonatomic, weak) id <VideoAnnotationDelegate> tapDelegate;
+@property (nonatomic, weak) id <PRVideoAnnotationDelegate> tapDelegate;
 @property (nonatomic) AVCaptureVideoPreviewLayer *captureVideoPreviewLayer;
 @property (nonatomic) BOOL enabled;
 
 - (void)updateUIWithRecordingState:(BOOL)recordingState;
 - (void)setProgress:(CGFloat)newProgress;
+- (void)initialScaleDone;
 
 @end

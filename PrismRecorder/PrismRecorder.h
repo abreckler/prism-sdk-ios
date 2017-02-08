@@ -34,6 +34,6 @@ typedef void (^SendPostCompletionBlock)(BOOL success);
 + (instancetype)sharedManager;
 - (void)sendPost:(NSDictionary*)postData completion:(SendPostCompletionBlock)completion;
 - (void)setCurrentPost:(PRPost *)currentPost;
-
+- (void)handleShakeMotion;
 
 @end
