@@ -34,9 +34,7 @@ static PrismRecorder *sharedManager = nil;
 
 @implementation PrismRecorder
 
-
 BOOL isShowing;
-//NSTimer *recordingTimer;
 CFTimeInterval bln_startTime;
 
 
@@ -66,6 +64,7 @@ CFTimeInterval bln_startTime;
         } else {
             NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
+            //TODO: Inform host of failure
         }
     }];
     
@@ -108,13 +107,16 @@ CFTimeInterval bln_startTime;
 #pragma mark - Recording
 
 - (void)updateRecording {
+
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
         NSDate.date.timeIntervalSince1970 - self.applicationActivatedAtTime > 1.5)
     {
         if (self.shouldRecord) {
-            [self handleTap];
+            return;
         }
     }
+    
+    [self handleTap];
 }
 
 - (void)setupPreview
@@ -145,13 +147,10 @@ CFTimeInterval bln_startTime;
 
 - (void)handleTap
 {
-    RPScreenRecorder *sharedRecorder = RPScreenRecorder.sharedRecorder;
-    if(sharedRecorder.isRecording) {
+    if(self.isRecording) {
         [self stopRecording];
-    } else {
-        if (!_videoAnnotation) {
-            [self setupPreview];
-        }
+    } else if (!_videoAnnotation) {
+        [self setupPreview];
         [self startRecording];
     }
 }
@@ -553,9 +552,11 @@ CFTimeInterval bln_startTime;
     }
 }
 
+- (BOOL)isRecording {
+    return  RPScreenRecorder.sharedRecorder.isRecording;
+}
 
-
--(BOOL)isDebugEnabled {
+- (BOOL)isDebugEnabled {
     //#ifdef DEBUG
     //    return true;
     //#endif
