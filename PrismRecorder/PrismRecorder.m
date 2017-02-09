@@ -366,11 +366,8 @@ CFTimeInterval bln_startTime;
 
 - (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
 {
-    [previewController dismissViewControllerAnimated:YES completion:nil];
-    
-    //TODO: get latest video
-    
-    
+    BLog();
+
 }
 
 
@@ -378,11 +375,33 @@ CFTimeInterval bln_startTime;
     
     if ([activityTypes containsObject:UIActivityTypeSaveToCameraRoll]) {
         BLog(@"types %@", activityTypes);
+           //TODO: get latest video
+    } else {
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Discard recording?"
+                                              message:@"You didn't save your recording.\nThere is no undo and you will have to start over."
+                                              preferredStyle:UIAlertControllerStyleAlert];
+        
+        
+        UIAlertAction *yesAction = [UIAlertAction
+                                    actionWithTitle:NSLocalizedString(@"Discard", nil)
+                                    style:UIAlertActionStyleDestructive
+                                    handler:^(UIAlertAction *action)
+                                    {
+                                        [previewController dismissViewControllerAnimated:YES completion:nil];
+                                    }];
+        
+        [alertController addAction:yesAction];
+        
+        UIAlertAction *noAction = [UIAlertAction  actionWithTitle:NSLocalizedString(@"Cancel",nil) style:UIAlertActionStyleCancel handler:nil];
+        [alertController addAction:noAction];
+        
+        [self.previewViewController presentViewController:alertController animated:YES completion:nil];
     }
     
 }
 
-#pragma mark - PBJVisionDelegate
+#pragma mark - Permissions
 
 - (BOOL)recordingPermission:(BOOL)triggerRequest
 {
@@ -430,7 +449,7 @@ CFTimeInterval bln_startTime;
      }];
 }
 
-//permissions
+
 - (void)permissionCallback:(NSString*)message
 {
     UIAlertController *alertController = [UIAlertController
@@ -489,16 +508,6 @@ CFTimeInterval bln_startTime;
     return shoudlRecord;
 }
 
-- (UIViewController*)currentViewController
-{
-    UIViewController *currentViewController = self.mainWindow.rootViewController;
-    while (currentViewController.presentedViewController) {
-        currentViewController = currentViewController.presentedViewController;
-    }
-    BLog(@"top most class %@", currentViewController.class);
-    return currentViewController;
-}
-
 
 
 #pragma mark - Post
@@ -546,7 +555,7 @@ CFTimeInterval bln_startTime;
 
 
 
-#pragma mark - private
+#pragma mark - App State
 
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification
@@ -572,6 +581,21 @@ CFTimeInterval bln_startTime;
     }
 }
 
+
+#pragma mark - Helpers
+
+
+- (UIViewController*)currentViewController
+{
+    UIViewController *currentViewController = self.mainWindow.rootViewController;
+    while (currentViewController.presentedViewController) {
+        currentViewController = currentViewController.presentedViewController;
+    }
+    BLog(@"top most class %@", currentViewController.class);
+    return currentViewController;
+}
+
+
 - (BOOL)isRecording {
     return  RPScreenRecorder.sharedRecorder.isRecording;
 }
@@ -587,8 +611,6 @@ CFTimeInterval bln_startTime;
     [[NSUserDefaults standardUserDefaults] setBool:status forKey:@"kDEBUGMODE"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
-
-#pragma mark - helpers
 
 - (void)showAlerWithTitle:(NSString*)title andMessage:(NSString*)message openSettings:(BOOL)settings {
     UIAlertController *alertController = [UIAlertController
@@ -614,7 +636,7 @@ CFTimeInterval bln_startTime;
     UIAlertAction *noAction = [UIAlertAction  actionWithTitle:NSLocalizedString(@"Ok",nil) style:UIAlertActionStyleDestructive handler:nil];
     [alertController addAction:noAction];
     
-    [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
+    [self.currentViewController presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)openSystemSettings {
