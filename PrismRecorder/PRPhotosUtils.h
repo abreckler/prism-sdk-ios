@@ -51,7 +51,7 @@ typedef void (^PRPhotoLibraryAlbumCreationBlock)(BOOL success, PHAssetCollection
 - (void)initLibrary;
 - (void)resetCachedAssets;
 - (void)getImagesWithBlock:(PRPhotoLibraryGetImagesBlock)success;
-- (void)getLatestAssetWithBlock:(PRPhotoLibraryGetLatestAssetBlock)completion;
+- (void)getLatestAssetForType:(PrismAssetType)type andBlock:(PRPhotoLibraryGetLatestAssetBlock)completion;
 - (NSInteger)getImagesCount;
 - (void)deleteAssetWithIdentifier:(NSString*)localId completion:(PRPhotoLibraryCompletionBlock)completion;
 - (void)saveImageToLibrary:(UIImage *)image completion:(PRPhotoLibraryCreationBlock)completion;

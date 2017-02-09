@@ -12,7 +12,6 @@
 
 @interface PRPhotosUtils() // <PHPhotoLibraryChangeObserver>
 @property (strong) PHFetchResult *assetsFetchResults;
-@property (strong) PHFetchResult *screenshotsFetchResults;
 @property (strong) PHCachingImageManager *imageManager;
 @property (nonatomic, strong) NSOperationQueue *queue;
 @end
@@ -35,11 +34,10 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
 
 
 - (void)initLibrary {
-    
-    _assetsType = PRScreenshots;
+    BLog();
+    _assetsType = PRAllAssets;
     
     self.assetsFetchResults =  [PHAsset fetchAssetsWithOptions:[self assetsFetchOptions]];
-    self.screenshotsFetchResults = [PHAsset fetchAssetsWithOptions:[self screenshotsFetchOptions]];
     
     NSMutableArray *assetsResult = [[NSMutableArray alloc] init];
     [_assetsFetchResults enumerateObjectsUsingBlock:^(PHAsset *asset, NSUInteger idx2, BOOL *stop2) {
@@ -112,17 +110,19 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
     }];
 }
 
-- (void)getLatestAssetWithBlock:(PRPhotoLibraryGetLatestAssetBlock)completion {
+- (void)getLatestAssetForType:(PrismAssetType)type andBlock:(PRPhotoLibraryGetLatestAssetBlock)completion {
     
     [self.queue addOperationWithBlock:^{
         
         PRPhotoLibraryPermissionStatus status = [self permissionStatus];
         
         if (status == PRPhotoLibraryPermissionStatusGranted) {
+            _assetsType = type;
+            PHFetchOptions *options = [self assetsFetchOptions];
+            options.fetchLimit = 1;
+            self.assetsFetchResults =  [PHAsset fetchAssetsWithOptions:options];
             
-            self.screenshotsFetchResults =  [PHAsset fetchAssetsWithOptions:[self screenshotsFetchOptions]];
-            
-            PHAsset *latest = _screenshotsFetchResults.firstObject;
+            PHAsset *latest = self.assetsFetchResults.firstObject;
             
             if (!latest.hidden) {
                 [self executeInMainThread:^{
@@ -138,35 +138,6 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
         
     }];
 }
-
-- (void)getLatestScreenshotWithBlock:(PRPhotoLibraryGetLatestAssetBlock)completion {
-    
-    [self.queue addOperationWithBlock:^{
-        
-        PRPhotoLibraryPermissionStatus status = [self permissionStatus];
-        
-        if (status == PRPhotoLibraryPermissionStatusGranted) {
-            
-            self.screenshotsFetchResults =  [PHAsset fetchAssetsWithOptions:[self screenshotsFetchOptions]];
-            
-            PHAsset *latest = _assetsFetchResults.firstObject;
-            
-            if (!latest.hidden) {
-                [self executeInMainThread:^{
-                    if (completion) completion([[PrismAsset alloc] initWithPHAsset:latest]);
-                }];
-            }
-        }
-        else {
-            [self executeInMainThread:^{
-                if (completion) completion(nil);
-            }];
-        }
-        
-    }];
-}
-
-
 
 - (void)deleteAssetWithIdentifier:(NSString*)localId completion:(PRPhotoLibraryCompletionBlock)completion {
     PHFetchResult *fetchAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[localId] options:nil];
