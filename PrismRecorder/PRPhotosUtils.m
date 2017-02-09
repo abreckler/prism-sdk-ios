@@ -437,7 +437,7 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
 - (PHFetchOptions *) assetsFetchOptions {
     
     PHFetchOptions *options = [[PHFetchOptions alloc] init];
-    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"modificationDate" ascending:NO]];
+    options.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:NO]];
     
     switch (_assetsType) {
         case PRVideos:
