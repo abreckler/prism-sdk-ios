@@ -309,8 +309,8 @@ CFTimeInterval bln_startTime;
             [self.currentViewController presentViewController:self.previewViewController animated:YES completion:nil];
         }
         
-        for (UIView *subview in self.previewViewController.view.subviews) {
-            BLog(@"%@", subview.class);
+        for (CALayer *sublayer in self.previewViewController.view.layer.sublayers) {
+            BLog(@"%@", sublayer.class);
 
         }
     }];
@@ -370,6 +370,15 @@ CFTimeInterval bln_startTime;
     
     //TODO: get latest video
     
+    
+}
+
+
+- (void)previewController:(RPPreviewViewController *)previewController didFinishWithActivityTypes:(NSSet<NSString *> *)activityTypes {
+    
+    if ([activityTypes containsObject:UIActivityTypeSaveToCameraRoll]) {
+        BLog(@"types %@", activityTypes);
+    }
     
 }
 
@@ -581,25 +590,28 @@ CFTimeInterval bln_startTime;
 
 #pragma mark - helpers
 
-- (void)showAlerWithTitle:(NSString*)title andMessage:(NSString*)message {
+- (void)showAlerWithTitle:(NSString*)title andMessage:(NSString*)message openSettings:(BOOL)settings {
     UIAlertController *alertController = [UIAlertController
                                           alertControllerWithTitle:title
                                           message:message
                                           preferredStyle:UIAlertControllerStyleAlert];
     
     
-    UIAlertAction *yesAction = [UIAlertAction
-                                actionWithTitle:NSLocalizedString(@"Take me to Settings", nil)
-                                style:UIAlertActionStyleCancel
-                                handler:^(UIAlertAction *action)
-                                {
-                                    [self openSystemSettings];
-                                }];
+    if (settings) {
+        UIAlertAction *yesAction = [UIAlertAction
+                                    actionWithTitle:NSLocalizedString(@"Take me to Settings", nil)
+                                    style:UIAlertActionStyleCancel
+                                    handler:^(UIAlertAction *action)
+                                    {
+                                        [self openSystemSettings];
+                                    }];
+        
+        [alertController addAction:yesAction];
+    }
+
     
     
-    UIAlertAction *noAction = [UIAlertAction  actionWithTitle:NSLocalizedString(@"Later",nil) style:UIAlertActionStyleDestructive handler:nil];
-    
-    [alertController addAction:yesAction];
+    UIAlertAction *noAction = [UIAlertAction  actionWithTitle:NSLocalizedString(@"Ok",nil) style:UIAlertActionStyleDestructive handler:nil];
     [alertController addAction:noAction];
     
     [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:alertController animated:YES completion:nil];
