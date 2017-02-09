@@ -375,22 +375,20 @@ CFTimeInterval bln_startTime;
     
     if ([activityTypes containsObject:UIActivityTypeSaveToCameraRoll]) {
         BLog(@"types %@", activityTypes);
-           //TODO: get latest video
+        [previewController dismissViewControllerAnimated:YES completion:nil];
+                //TODO: get latest video
     } else {
+        
         
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Discard recording?"
                                               message:@"You didn't save your recording.\nThere is no undo and you will have to start over."
                                               preferredStyle:UIAlertControllerStyleAlert];
         
-        
-        UIAlertAction *yesAction = [UIAlertAction
-                                    actionWithTitle:NSLocalizedString(@"Discard", nil)
-                                    style:UIAlertActionStyleDestructive
-                                    handler:^(UIAlertAction *action)
+        UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Discard", nil)
+                                    style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action)
                                     {
                                         [previewController dismissViewControllerAnimated:YES completion:nil];
                                     }];
-        
         [alertController addAction:yesAction];
         
         UIAlertAction *noAction = [UIAlertAction  actionWithTitle:NSLocalizedString(@"Cancel",nil) style:UIAlertActionStyleCancel handler:nil];
@@ -584,6 +582,9 @@ CFTimeInterval bln_startTime;
 
 #pragma mark - Helpers
 
++ (NSBundle*)bundle {
+    return [NSBundle bundleForClass:self];    
+}
 
 - (UIViewController*)currentViewController
 {

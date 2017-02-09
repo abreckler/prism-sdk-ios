@@ -7,6 +7,7 @@
 //
 
 #import "PRVideoAnnotation.h"
+#import "PrismRecorder.h"
 #import "PRConstants.h"
 #import "NSString+PrismUtils.h"
 
@@ -282,7 +283,8 @@ BOOL animate = true;
     
     
     audioBackground = [[UIImageView alloc] initWithFrame:circleFrame];
-    audioBackground.image = [UIImage imageNamed:@"blink_audio"];
+    
+    audioBackground.image = [UIImage imageNamed:@"prism_audio" inBundle:[PrismRecorder bundle] compatibleWithTraitCollection:nil];
     audioBackground.contentMode = UIViewContentModeCenter;
     audioBackground.hidden = true;
     audioBackground.backgroundColor = [UIColor whiteColor];

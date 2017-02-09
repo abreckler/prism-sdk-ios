@@ -25,5 +25,6 @@ typedef void (^SendPostCompletionBlock)(BOOL success);
 - (void)sendPost:(NSDictionary*)postData completion:(SendPostCompletionBlock)completion;
 - (void)enableWithClientId:(NSString*)clientId;
 - (void)updateRecording;
++ (NSBundle*)bundle;
 
 @end

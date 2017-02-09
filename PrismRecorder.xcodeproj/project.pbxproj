@@ -28,6 +28,9 @@
 		E240B22D1E48D13000DCBB5F /* PrismUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E240B22B1E48D13000DCBB5F /* PrismUser.m */; };
 		E2B314B61E492D8600B63E4A /* PRVideoAnnotation.h in Headers */ = {isa = PBXBuildFile; fileRef = E2B314B41E492D8600B63E4A /* PRVideoAnnotation.h */; };
 		E2B314B71E492D8600B63E4A /* PRVideoAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = E2B314B51E492D8600B63E4A /* PRVideoAnnotation.m */; };
+		E2ECA14E1E4CC7BA00937D4E /* prism_audio.png in Resources */ = {isa = PBXBuildFile; fileRef = E2ECA14B1E4CC7BA00937D4E /* prism_audio.png */; };
+		E2ECA14F1E4CC7BA00937D4E /* prism_audio@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2ECA14C1E4CC7BA00937D4E /* prism_audio@2x.png */; };
+		E2ECA1501E4CC7BA00937D4E /* prism_audio@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E2ECA14D1E4CC7BA00937D4E /* prism_audio@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +58,9 @@
 		E240B22B1E48D13000DCBB5F /* PrismUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrismUser.m; sourceTree = "<group>"; };
 		E2B314B41E492D8600B63E4A /* PRVideoAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PRVideoAnnotation.h; sourceTree = "<group>"; };
 		E2B314B51E492D8600B63E4A /* PRVideoAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PRVideoAnnotation.m; sourceTree = "<group>"; };
+		E2ECA14B1E4CC7BA00937D4E /* prism_audio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = prism_audio.png; sourceTree = "<group>"; };
+		E2ECA14C1E4CC7BA00937D4E /* prism_audio@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "prism_audio@2x.png"; sourceTree = "<group>"; };
+		E2ECA14D1E4CC7BA00937D4E /* prism_audio@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "prism_audio@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +127,7 @@
 				E240B2011E488D9A00DCBB5F /* Info.plist */,
 				E2B314B41E492D8600B63E4A /* PRVideoAnnotation.h */,
 				E2B314B51E492D8600B63E4A /* PRVideoAnnotation.m */,
+				E2ECA1511E4CC7C400937D4E /* resources */,
 				E22A5A001E4B3BF7002911F6 /* model */,
 				E240B2171E489B7F00DCBB5F /* datasource */,
 				E22A59FF1E4B3BE1002911F6 /* utilities */,
@@ -136,6 +143,16 @@
 				E240B2141E48910D00DCBB5F /* PRAssetsProtocol.h */,
 			);
 			name = datasource;
+			sourceTree = "<group>";
+		};
+		E2ECA1511E4CC7C400937D4E /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				E2ECA14B1E4CC7BA00937D4E /* prism_audio.png */,
+				E2ECA14C1E4CC7BA00937D4E /* prism_audio@2x.png */,
+				E2ECA14D1E4CC7BA00937D4E /* prism_audio@3x.png */,
+			);
+			name = resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,6 +235,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2ECA1501E4CC7BA00937D4E /* prism_audio@3x.png in Resources */,
+				E2ECA14E1E4CC7BA00937D4E /* prism_audio.png in Resources */,
+				E2ECA14F1E4CC7BA00937D4E /* prism_audio@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
