@@ -57,7 +57,7 @@ CFTimeInterval bln_startTime;
     [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:UserDefaultsKey];
     
     _currentPost = nil;
-    
+    _currentUser = [PrismUser new];
     _apiClient = [PRAPIClient new];
     [_apiClient getAccountDetails:clientId completion:^(BOOL status, NSData *data, NSError *error) {
         if (status) {
@@ -384,9 +384,9 @@ CFTimeInterval bln_startTime;
             [prismAsset getAssetVideo:^(AVAsset *avasset) {
                 AVURLAsset *urlasset = (AVURLAsset*)avasset;
                 NSString *dummyImg = @"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC";
-                NSDictionary *post = @{@"username" :self.currentUser.username,
+                NSDictionary *post = @{@"username" : self.currentUser.username,
                                        @"image" : dummyImg,
-                                       @"videoPath": urlasset.URL,
+                                       @"videoPath": urlasset.URL.absoluteString,
                                        @"description" : @"",
                                        @"report_link" : @"",
                                        @"content_type" : @2,
