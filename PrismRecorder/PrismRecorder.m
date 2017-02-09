@@ -536,6 +536,17 @@ CFTimeInterval bln_startTime;
 - (void)sendPost:(NSDictionary*)postData completion:(SendPostCompletionBlock)completion {
     BLog();
     
+    
+    UIView *loadingView = [self loadingView:@"Just a sec..."];
+    UIButton *cancelBtn = [UIButton new];
+    cancelBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    [cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [cancelBtn setTitle:[NSLocalizedString(@"Cancel", nil) uppercaseString] forState:UIControlStateNormal];
+    cancelBtn.frame = (CGRect) (CGRect){0, loadingView.frame.size.height - 60, loadingView.frame.size.width, 60};
+    [cancelBtn addTarget:self action:@selector(cancelRequests:) forControlEvents:UIControlEventTouchUpInside];
+    [self.mainWindow addSubview:loadingView];
+    [self.mainWindow addSubview:cancelBtn];
+    
     if (!postData[@"image"]) {
         if (completion)
             completion(false);
