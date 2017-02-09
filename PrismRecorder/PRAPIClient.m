@@ -55,10 +55,6 @@ NSString *const _PRTestingURLString = @"https://stage.blink.am";
     
     
     NSURL *URL = [self setupRequestURLWithPath:@"/posts/" isAPICall:YES];
-    NSString *mimeType = @"data:image/jpeg;base64,";
-//    NSString *encodedOriginalImage = [UIImageJPEGRepresentation(_currentPost.originalImage, 1) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-//    NSArray *originalImage=  @[[mimeType stringByAppendingString:encodedOriginalImage]];
-//    [postData addEntriesFromDictionary:@{@"image_source" : originalImage}];
     NSMutableURLRequest *request = [self requestSetup:URL andType:@"POST"];
     request.URL = URL;
     

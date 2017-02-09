@@ -374,11 +374,33 @@ CFTimeInterval bln_startTime;
 - (void)previewController:(RPPreviewViewController *)previewController didFinishWithActivityTypes:(NSSet<NSString *> *)activityTypes {
     
     if ([activityTypes containsObject:UIActivityTypeSaveToCameraRoll]) {
-        BLog(@"types %@", activityTypes);
+        BLog(@"");
         [previewController dismissViewControllerAnimated:YES completion:nil];
-                //TODO: get latest video
-    } else {
+
+        PRPhotosUtils *library = [PRPhotosUtils new];
         
+        [library getLatestAssetForType:PRVideos andBlock:^(PrismAsset *prismAsset) {
+            
+            [prismAsset getAssetVideo:^(AVAsset *avasset) {
+                AVURLAsset *urlasset = (AVURLAsset*)avasset;
+                NSString *dummyImg = @"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC";
+                NSDictionary *post = @{@"username" :self.currentUser.username,
+                                       @"image" : dummyImg,
+                                       @"videoPath": urlasset.URL,
+                                       @"description" : @"",
+                                       @"report_link" : @"",
+                                       @"content_type" : @2,
+                                       @"is_published": @1
+                                       };
+                
+                [self sendPost:post completion:^(BOOL success) {
+                    
+                }];
+            }];
+            
+        }];
+    } else {
+    
         
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Discard recording?"
                                               message:@"You didn't save your recording.\nThere is no undo and you will have to start over."
@@ -612,6 +634,64 @@ CFTimeInterval bln_startTime;
     [[NSUserDefaults standardUserDefaults] setBool:status forKey:@"kDEBUGMODE"];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+- (UIView *)loadingView:(NSString*)text
+{
+    
+    UIView *loadingView = [[UIView alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    loadingView.alpha = 0.85f;
+    loadingView.backgroundColor = [UIColor colorWithRed:0.969 green:0.973 blue:0.973 alpha:1.000];
+    
+    if (text.length)
+    {
+        [loadingView addSubview:[self makeLabelWith:text]];
+    }
+    
+    UIActivityIndicatorView *activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    activityIndicator.backgroundColor = [UIColor clearColor];
+    activityIndicator.color = [UIColor colorWithRed:0.208 green:0.318 blue:0.471 alpha:1.000];
+    CGRect activityIndicatorFrame = CGRectMake(loadingView.frame.size.width/2-activityIndicator.frame.size.width/2,
+                                               loadingView.frame.size.height/2-activityIndicator.frame.size.height/2,
+                                               activityIndicator.frame.size.width,
+                                               activityIndicator.frame.size.height);
+    if ([UIScreen mainScreen].scale == 1.f) activityIndicatorFrame = CGRectIntegral(activityIndicatorFrame);
+    activityIndicator.frame = activityIndicatorFrame;
+    [activityIndicator startAnimating];
+    [loadingView addSubview:activityIndicator];
+    
+    
+    return loadingView;
+}
+
+- (UILabel *)makeLabelWith:(NSString *)text {
+    
+    UIFont *font = [UIFont systemFontOfSize:22];
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    
+    NSAttributedString *attributedString =[[NSAttributedString alloc]
+                                           initWithString:text
+                                           attributes:@{
+                                                        NSStrokeWidthAttributeName: @-3.0,
+                                                        NSStrokeColorAttributeName:[UIColor whiteColor],
+                                                        NSForegroundColorAttributeName:[UIColor blackColor],
+                                                        NSFontAttributeName:font,
+                                                        NSParagraphStyleAttributeName:paragraphStyle,
+                                                        }
+                                           ];
+    
+    UILabel *label = [UILabel new];
+    CGFloat width = UIScreen.mainScreen.bounds.size.width;
+    label.frame = CGRectMake(20, width/2 + 40, width - 40, 100);
+    label.textAlignment = NSTextAlignmentCenter;
+    label.numberOfLines  = 0;
+    label.attributedText  = attributedString;
+    
+    return label;
+    
+}
+
 
 - (void)showAlerWithTitle:(NSString*)title andMessage:(NSString*)message openSettings:(BOOL)settings {
     UIAlertController *alertController = [UIAlertController
