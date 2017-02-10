@@ -38,10 +38,6 @@ typedef void (^PRPhotoLibraryAlbumCreationBlock)(BOOL success, PHAssetCollection
 
 @interface PRPhotosUtils : NSObject
 
-@property (nonatomic) id <PRAssetsProtocol> assetsDataSource;
-@property (nonatomic) PrismAssetType assetsType;
-
-
 // Permissions
 - (PRPhotoLibraryPermissionStatus)permissionStatus;
 - (void)requestLibraryAccessHandler:(PRPhotoLibraryAccessHandler)handler;
@@ -49,17 +45,10 @@ typedef void (^PRPhotoLibraryAlbumCreationBlock)(BOOL success, PHAssetCollection
 
 //Library
 - (void)initLibrary;
-- (void)resetCachedAssets;
+- (void)registerChangeObserver;
+- (void)unregisterChangeObserver;
 - (void)getImagesWithBlock:(PRPhotoLibraryGetImagesBlock)success;
 - (void)getLatestAssetForType:(PrismAssetType)type andBlock:(PRPhotoLibraryGetLatestAssetBlock)completion;
-- (NSInteger)getImagesCount;
-- (void)deleteAssetWithIdentifier:(NSString*)localId completion:(PRPhotoLibraryCompletionBlock)completion;
-- (void)saveImageToLibrary:(UIImage *)image completion:(PRPhotoLibraryCreationBlock)completion;
-- (void)saveVideoToLibrary:(NSURL *)videoURL completion:(PRPhotoLibraryCreationBlock)completion;
-- (void)saveFileToLibrary:(NSURL *)fileURL completion:(PRPhotoLibraryCreationBlock)completion;
-- (void)replaceAssetInLibrary:(PRAsset *)asset forAssetType:(PrismAssetType)assetType usingOptions:(NSDictionary*)replacementData completion:(PRPhotoLibraryCreationBlock)completion;
-- (void)revertAssetToOriginal:(PRAsset *)asset completion:(PRPhotoLibraryCreationBlock)completion;
-
 
 
 - (NSOperationQueue *)queue;

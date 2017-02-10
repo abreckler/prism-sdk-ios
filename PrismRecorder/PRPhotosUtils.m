@@ -7,13 +7,16 @@
 //
 
 #import "PRPhotosUtils.h"
+#import "PrismRecorder.h"
 #import "PrismAsset.h"
 #import "PRConstants.h"
 
-@interface PRPhotosUtils() // <PHPhotoLibraryChangeObserver>
+@interface PRPhotosUtils() <PHPhotoLibraryChangeObserver>
+@property (nonatomic) id <PRAssetsProtocol> assetsDataSource;
 @property (strong) PHFetchResult *assetsFetchResults;
 @property (strong) PHCachingImageManager *imageManager;
 @property (nonatomic, strong) NSOperationQueue *queue;
+@property (nonatomic) PrismAssetType assetsType;
 @end
 
 
@@ -46,8 +49,14 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
     
     self.assetsDataSource = [[PRAssetsDataSource alloc] initWithAssets:assetsResult];
     
-//    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
-    
+}
+
+- (void)registerChangeObserver {
+    [[PHPhotoLibrary sharedPhotoLibrary] registerChangeObserver:self];
+}
+
+- (void)unregisterChangeObserver {
+    [[PHPhotoLibrary sharedPhotoLibrary] unregisterChangeObserver:self];
 }
 
 #pragma mark - Photos library
@@ -119,9 +128,9 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
         if (status == PRPhotoLibraryPermissionStatusGranted) {
             _assetsType = type;
             PHFetchOptions *options = [self assetsFetchOptions];
-            options.fetchLimit = 1;
+//            options.fetchLimit = 1;
             self.assetsFetchResults =  [PHAsset fetchAssetsWithOptions:options];
-            
+            BLog(@"%li", self.assetsFetchResults.count);
             PHAsset *latest = self.assetsFetchResults.firstObject;
             
             if (!latest.hidden) {
@@ -139,288 +148,49 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
     }];
 }
 
-- (void)deleteAssetWithIdentifier:(NSString*)localId completion:(PRPhotoLibraryCompletionBlock)completion {
-    PHFetchResult *fetchAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[localId] options:nil];
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        [PHAssetChangeRequest deleteAssets:fetchAsset];
-    } completionHandler:^(BOOL success, NSError *error) {
-        if (completion)
-            completion(success);
-    }];
-}
-
-
-
 - (NSInteger)getImagesCount {
-    //  NSLog(@"screenshots count %li", (unsigned long)_assetsFetchResults.count);
     return _assetsFetchResults.count;
 }
 
+#pragma mark - PHPhotoLibraryChangeObserver
 
-#pragma mark-
-#pragma mark - Save to Library
-
-- (void)saveImageToLibrary:(UIImage *)image completion:(PRPhotoLibraryCreationBlock)completion {
-    
-    __block PHObjectPlaceholder *placeholder;
-    
-    [self blinkAlbum:^(BOOL success, PHAssetCollection *blinkCollection, NSError *error) {
+- (void)photoLibraryDidChange:(PHChange *)changeInstance
+{
+    // Call might come on any background queue. Re-dispatch to the main queue to handle it.
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-        if (success) {
-            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                PHAssetCollectionChangeRequest *changeRequest;
-                if ( [PHAssetResourceCreationOptions class] ) { //check if iOS9 and up
-                    PHAssetCreationRequest *creationRequest = [PHAssetCreationRequest creationRequestForAssetFromImage:image];
-                    placeholder = creationRequest.placeholderForCreatedAsset;
-                } else {
-                    PHAssetChangeRequest *assetChangeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
-                    placeholder = assetChangeRequest.placeholderForCreatedAsset;
+        if (_assetsFetchResults.count == 0) {
+            _assetsType = PRVideos;
+            self.assetsFetchResults = [PHAsset fetchAssetsWithOptions:[self assetsFetchOptions]];
+        }
+        
+        PHFetchResultChangeDetails *libraryChanges = [changeInstance changeDetailsForFetchResult:self.assetsFetchResults];
+        //        NSLog(@"collection changes %@", screenshotChanges);
+        //        NSLog(@"fetch count %i", self.screenshotsFetchResults.count);
+        
+        
+        if ( libraryChanges.hasIncrementalChanges) {
+            
+            [self getLatestAssetForType:_assetsType andBlock:^(PrismAsset *prismAsset) {
+                
+                if (prismAsset) {
+                    // get the new fetch result
+                    self.assetsFetchResults = [libraryChanges fetchResultAfterChanges];
+                    
+                    [prismAsset getAssetVideo:^(AVAsset *avasset) {
+                        AVURLAsset *urlasset = (AVURLAsset*)avasset;
+                        [[PrismRecorder sharedManager] setRecordingPath:urlasset.URL.absoluteString];
+                    }];
                     
                 }
-                PHFetchResult *blinkAssets = [PHAsset fetchAssetsInAssetCollection:blinkCollection options:nil];
-                changeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:blinkCollection assets:blinkAssets];
-                [changeRequest addAssets:@[placeholder]];
-                
-            } completionHandler:^(BOOL success, NSError *error) {
-                PrismAsset *savedAsset;
-                if ( !success )
-                    NSLog( @"Could not save Image to photo library: %@", error );
-                else {
-                    PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[placeholder.localIdentifier] options:nil];
-                    savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
-                }
-                if (completion)
-                    completion(success, savedAsset, error);
-            }];
-        }
-        else if (completion)
-            completion(success, nil, error);
-    }];
-}
-
-- (void)saveFileToLibrary:(NSURL *)fileURL completion:(PRPhotoLibraryCreationBlock)completion {
-    __block PHObjectPlaceholder *placeholder;
-    __block PHFetchResult *blinkAssets;
-    
-    dispatch_block_t cleanup = ^{
-        [[NSFileManager defaultManager] removeItemAtURL:fileURL error:nil];
-    };
-    
-    [self blinkAlbum:^(BOOL success, PHAssetCollection *blinkCollection, NSError *error) {
-        
-        if (success) {
-            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                if ( [PHAssetResourceCreationOptions class] ) { //iOS 9 storage saving
-                    PHAssetResourceCreationOptions *options = [[PHAssetResourceCreationOptions alloc] init];
-                    options.shouldMoveFile = YES;
-                    PHAssetCreationRequest *creationRequest = [PHAssetCreationRequest creationRequestForAsset];
-                    [creationRequest addResourceWithType:PHAssetResourceTypePhoto fileURL:fileURL options:options];
-                    placeholder = creationRequest.placeholderForCreatedAsset;
-                }
-                else {
-                    PHAssetChangeRequest *assetChangeRequest= [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:fileURL];
-                    placeholder = assetChangeRequest.placeholderForCreatedAsset;
-                }
-                
-                
-                blinkAssets = [PHAsset fetchAssetsInAssetCollection:blinkCollection options:nil];
-                PHAssetCollectionChangeRequest *changeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:blinkCollection assets:blinkAssets];
-                [changeRequest addAssets:@[placeholder]];
-            } completionHandler:^( BOOL success, NSError *error ) {
-                PrismAsset *savedAsset;
-                if ( !success ) {
-                    NSLog( @"Could not save file to photo library: %@", error );
-                } else {
-                    PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[placeholder.localIdentifier] options:nil];
-                    savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
-                }
-                if (completion)
-                    completion(success, savedAsset, error);
-                
-                cleanup();
             }];
             
-        } else {
-            if (completion)
-                completion(success, nil, error);
-        }
-    }];
-}
-
-- (void)saveVideoToLibrary:(NSURL *)videoURL completion:(PRPhotoLibraryCreationBlock)completion {
-    
-    __block PHObjectPlaceholder *placeholder;
-    __block PHFetchResult *blinkAssets;
-    
-    dispatch_block_t cleanup = ^{
-        [[NSFileManager defaultManager] removeItemAtURL:videoURL error:nil];
-    };
-    
-    [self blinkAlbum:^(BOOL success, PHAssetCollection *blinkCollection, NSError *error) {
-        
-        if (success) {
-            [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                
-                if ( [PHAssetResourceCreationOptions class] ) { //iOS 9 storage saving
-                    PHAssetResourceCreationOptions *options = [[PHAssetResourceCreationOptions alloc] init];
-                    options.shouldMoveFile = YES;
-                    PHAssetCreationRequest *creationRequest = [PHAssetCreationRequest creationRequestForAsset];
-                    [creationRequest addResourceWithType:PHAssetResourceTypeVideo fileURL:videoURL options:options];
-                    placeholder = creationRequest.placeholderForCreatedAsset;
-                }
-                else {
-                    PHAssetChangeRequest *assetChangeRequest= [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:videoURL];
-                    placeholder = assetChangeRequest.placeholderForCreatedAsset;
-                }
-                
-                
-                blinkAssets = [PHAsset fetchAssetsInAssetCollection:blinkCollection options:nil];
-                PHAssetCollectionChangeRequest *changeRequest = [PHAssetCollectionChangeRequest changeRequestForAssetCollection:blinkCollection assets:blinkAssets];
-                [changeRequest addAssets:@[placeholder]];
-            } completionHandler:^( BOOL success, NSError *error ) {
-                PrismAsset *savedAsset;
-                if ( !success ) {
-                    NSLog( @"Could not save video to photo library: %@", error );
-                } else {
-                    PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[placeholder.localIdentifier] options:nil];
-                    savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
-                }
-                if (completion)
-                    completion(success, savedAsset, error);
-                
-                cleanup();
-            }];
-            
-        } else {
-            NSLog( @"failed to get album error: %@", error );
-            if (completion)
-                completion(success, nil, error);
-        }
-    }];
-}
-
-- (void)replaceAssetInLibrary:(PrismAsset *)asset forAssetType:(PrismAssetType)assetType usingOptions:(NSDictionary*)replacementData completion:(PRPhotoLibraryCreationBlock)completion {
-    
-    // Only allow editing if the PHAsset supports edit operations and it is not a Live Photo.
-    BLog(@"editable? %@", NSStringFromBool([asset.phAsset canPerformEditOperation:PHAssetEditOperationContent]));
-    
-    if ([asset.phAsset canPerformEditOperation:PHAssetEditOperationContent] && !(asset.phAsset.mediaSubtypes & PHAssetMediaSubtypePhotoLive)) {
-        
-        // Prepare the options to pass when requesting to edit the image.
-        PHContentEditingInputRequestOptions *options = [[PHContentEditingInputRequestOptions alloc] init];
-        
-        [options setCanHandleAdjustmentData:^BOOL(PHAdjustmentData *adjustmentData) {
-            return [adjustmentData.formatIdentifier isEqualToString:ReplaceIdentifier] && [adjustmentData.formatVersion isEqualToString:@"1.0"];
-        }];
-        
-        
-        [asset.phAsset requestContentEditingInputWithOptions:options completionHandler:^(PHContentEditingInput *contentEditingInput, NSDictionary *info) {
-            
-            
-            // Create a PHAdjustmentData object that describes the change that was applied.
-            PHAdjustmentData *adjustmentData = [[PHAdjustmentData alloc] initWithFormatIdentifier:ReplaceIdentifier formatVersion:@"1.0" data:[@"annotations" dataUsingEncoding:NSUTF8StringEncoding]];
-            
-            PHContentEditingOutput *contentEditingOutput = [[PHContentEditingOutput alloc] initWithContentEditingInput:contentEditingInput];
-            contentEditingOutput.adjustmentData = adjustmentData;
-            NSData *outputData;
-            
-            if (assetType == PRImages || assetType == PRScreenshots) {
-                UIImage *image = replacementData[@"image"];
-                outputData = UIImageJPEGRepresentation(image, 1);
-            } else {
-                outputData = [NSData dataWithContentsOfFile:replacementData[@"location"]];
-            }
-            
-            BOOL wrote = [outputData writeToURL:contentEditingOutput.renderedContentURL options:NSDataWritingAtomic error:nil];
-            BLog(@"wrote? %@", NSStringFromBool(wrote));
-            if (wrote)
-            {
-                [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-                    PHAssetChangeRequest *request = [PHAssetChangeRequest changeRequestForAsset:asset.phAsset];
-                    request.contentEditingOutput = contentEditingOutput;
-                    
-                } completionHandler:^(BOOL success, NSError *error) {
-                    PrismAsset *savedAsset;
-                    
-                    BLog(@"saved? %@", NSStringFromBool(success));
-                    
-                    if (success) {
-                        PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[asset.phAsset.localIdentifier] options:nil];
-                        savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
-                    }
-                    
-                    if (completion)
-                        completion(success, savedAsset, error);
-                    
-                    
-                }];
-            }
-        }];
-        
-    }
-}
-
-- (void)revertAssetToOriginal:(PrismAsset *)asset completion:(PRPhotoLibraryCreationBlock)completion {
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        PHAssetChangeRequest *request = [PHAssetChangeRequest changeRequestForAsset:asset.phAsset];
-        [request revertAssetContentToOriginal];
-    } completionHandler:^(BOOL success, NSError *error) {
-        PrismAsset *savedAsset;
-        
-        BLog(@"reverted? %@", NSStringFromBool(success));
-        
-        if (success) {
-            PHFetchResult* assetResult = [PHAsset fetchAssetsWithLocalIdentifiers:@[asset.phAsset.localIdentifier] options:nil];
-            savedAsset = [[PrismAsset alloc] initWithPHAsset:assetResult.firstObject];
         }
         
-        if (completion)
-            completion(success, savedAsset, error);
-    }];
+    });
 }
 
-- (void)blinkAlbum:(PRPhotoLibraryAlbumCreationBlock)completion {
-    __block PHAssetCollection *collection;
-    __block PHObjectPlaceholder *placeholder;
-    
-    // Find the album
-    PHFetchOptions *fetchOptions = [[PHFetchOptions alloc] init];
-    fetchOptions.predicate = [NSPredicate predicateWithFormat:@"title = %@", @"Blink"];
-    collection = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum
-                                                          subtype:PHAssetCollectionSubtypeAny
-                                                          options:fetchOptions].firstObject;
-    // Create the album
-    if (!collection)
-    {
-        [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-            PHAssetCollectionChangeRequest *createAlbum = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:@"Blink"];
-            placeholder = [createAlbum placeholderForCreatedAssetCollection];
-        } completionHandler:^(BOOL success, NSError *error) {
-            
-            if (!success) {
-                NSLog(@"failed to create custom album %@", error.localizedDescription);
-            }
-            
-            if (success)
-            {
-                PHFetchResult *collectionFetchResult = [PHAssetCollection
-                                                        fetchAssetCollectionsWithLocalIdentifiers:@[placeholder.localIdentifier]
-                                                        options:nil];
-                collection = collectionFetchResult.firstObject;
-                
-            }
-            
-            if (completion) {
-                completion (success, collection, error);
-            }
-        }];
-        return;
-    }
-    
-    if (completion) {
-        completion (true, collection, nil);
-    }
-}
+
 
 
 
