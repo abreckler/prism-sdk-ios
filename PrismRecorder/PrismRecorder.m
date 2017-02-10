@@ -22,7 +22,6 @@ NSString* const UserDefaultsKey = @"io.prism.recorder.client";
 @interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
 @property (strong, nonatomic) PrismUser *currentUser;
 @property (nonatomic) PrismPost *currentPost;
-@property (nonatomic) NSString *errorMessage;
 @property (strong, nonatomic) PRAPIClient *apiClient;
 @property (nonatomic) PRPhotosUtils *library;
 @property (nonatomic, weak) UIWindow *mainWindow;
@@ -65,8 +64,6 @@ CFTimeInterval bln_startTime;
             NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             BLog(@"account %@", accountDetails);
             [_currentUser configureWithData:accountDetails];
-            
-            self.errorMessage = @"";
         } else {
             NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
@@ -560,16 +557,12 @@ CFTimeInterval bln_startTime;
             NSDictionary *createdPost = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
             BLog(@"published post %@", createdPost);
             [_currentPost updateWithData:createdPost];
-            self.errorMessage = @"";
         } else {
             NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
             BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
-#ifdef DEBUG
-            self.errorMessage = [NSString stringWithFormat:@"failed with response error %@\n username %@", error.localizedDescription, self.currentUser.username];
-#endif
         }
         
-        [self.overlay removeFromSuperview];  
+        [self clearWindow];
     }];
    
 }
@@ -579,16 +572,7 @@ CFTimeInterval bln_startTime;
     _currentPost = currentPost;
 }
 
-- (void)cancelRequests {
-    [self.apiClient cancelRequests];
-    
-    [self.overlay removeFromSuperview];
-}
-
-
-
 #pragma mark - App State
-
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification
 {
@@ -621,6 +605,20 @@ CFTimeInterval bln_startTime;
         _library = [PRPhotosUtils new];
     }
     return _library;
+}
+
+- (void)cancelRequests {
+    [self.apiClient cancelRequests];
+    [self clearWindow];
+}
+
+- (void)clearWindow {
+    if (_overlay.superview) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_overlay removeFromSuperview];
+            _overlay = nil;
+        });
+    }
 }
 
 + (NSBundle*)bundle {
