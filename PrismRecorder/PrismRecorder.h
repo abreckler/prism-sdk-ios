@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
 //! Project version number for PrismRecorder.
 FOUNDATION_EXPORT double PrismRecorderVersionNumber;
 FOUNDATION_EXPORT const unsigned char PrismRecorderVersionString[];
@@ -22,9 +23,9 @@ typedef void (^SendPostCompletionBlock)(BOOL success);
 
 //engine
 + (instancetype)sharedManager;
-- (void)sendPost:(NSDictionary*)postData completion:(SendPostCompletionBlock)completion;
 - (void)enableWithClientId:(NSString*)clientId;
 - (void)updateRecording;
+- (void)setRecordingPath:(NSString *)recordingPath;
 + (NSBundle*)bundle;
 
 @end

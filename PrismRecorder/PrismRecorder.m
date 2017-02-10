@@ -24,7 +24,9 @@ NSString* const UserDefaultsKey = @"io.prism.recorder.client";
 @property (nonatomic) PrismPost *currentPost;
 @property (nonatomic) NSString *errorMessage;
 @property (strong, nonatomic) PRAPIClient *apiClient;
+@property (nonatomic) PRPhotosUtils *library;
 @property (nonatomic, weak) UIWindow *mainWindow;
+@property (nonatomic) UIView *overlay;
 @property (nonatomic) NSTimeInterval applicationActivatedAtTime;
 @property (nonatomic, strong) PRVideoAnnotation *videoAnnotation;
 @property (weak, nonatomic) RPPreviewViewController *previewViewController;
@@ -38,7 +40,6 @@ static PrismRecorder *sharedManager = nil;
 
 BOOL isShowing;
 CFTimeInterval bln_startTime;
-
 
 + (instancetype)sharedManager {
     static id sharedManager = nil;
@@ -307,12 +308,10 @@ CFTimeInterval bln_startTime;
             self.previewViewController.previewControllerDelegate = self;
             self.previewViewController.modalPresentationStyle = UIModalPresentationFullScreen;
             [self.currentViewController presentViewController:self.previewViewController animated:YES completion:nil];
+            [self.library registerChangeObserver];
+            return;
         }
-        
-        for (CALayer *sublayer in self.previewViewController.view.layer.sublayers) {
-            BLog(@"%@", sublayer.class);
-
-        }
+         isShowing = false;
     }];
     
 }
@@ -336,6 +335,7 @@ CFTimeInterval bln_startTime;
                 _videoAnnotation.enabled = sharedRecorder.recording;
                 [_videoAnnotation updateUIWithRecordingState:sharedRecorder.recording];
                 _videoAnnotation.backgroundColor = [UIColor clearColor];
+                 isShowing = false;
             }];
         }];
     }
@@ -367,41 +367,15 @@ CFTimeInterval bln_startTime;
 - (void)previewControllerDidFinish:(RPPreviewViewController *)previewController
 {
     BLog();
-
+    isShowing = false;
+    [previewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 
 - (void)previewController:(RPPreviewViewController *)previewController didFinishWithActivityTypes:(NSSet<NSString *> *)activityTypes {
-    
-    if ([activityTypes containsObject:UIActivityTypeSaveToCameraRoll]) {
-        BLog(@"");
-        [previewController dismissViewControllerAnimated:YES completion:nil];
 
-        PRPhotosUtils *library = [PRPhotosUtils new];
-        
-        [library getLatestAssetForType:PRVideos andBlock:^(PrismAsset *prismAsset) {
-            
-            [prismAsset getAssetVideo:^(AVAsset *avasset) {
-                AVURLAsset *urlasset = (AVURLAsset*)avasset;
-                NSString *dummyImg = @"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC";
-                NSDictionary *post = @{@"username" : self.currentUser.username,
-                                       @"image" : dummyImg,
-                                       @"videoPath": urlasset.URL.absoluteString,
-                                       @"description" : @"",
-                                       @"report_link" : @"",
-                                       @"content_type" : @2,
-                                       @"is_published": @1
-                                       };
-                
-                [self sendPost:post completion:^(BOOL success) {
-                    
-                }];
-            }];
-            
-        }];
-    } else {
-    
-        
+    if (![activityTypes containsObject:UIActivityTypeSaveToCameraRoll]) {
+       
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Discard recording?"
                                               message:@"You didn't save your recording.\nThere is no undo and you will have to start over."
                                               preferredStyle:UIAlertControllerStyleAlert];
@@ -410,6 +384,7 @@ CFTimeInterval bln_startTime;
                                     style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action)
                                     {
                                         [previewController dismissViewControllerAnimated:YES completion:nil];
+                                        [self.library unregisterChangeObserver];
                                     }];
         [alertController addAction:yesAction];
         
@@ -418,7 +393,6 @@ CFTimeInterval bln_startTime;
         
         [self.previewViewController presentViewController:alertController animated:YES completion:nil];
     }
-    
 }
 
 #pragma mark - Permissions
@@ -532,20 +506,39 @@ CFTimeInterval bln_startTime;
 
 #pragma mark - Post
 
+- (void)setRecordingPath:(NSString *)recordingPath {
+    NSString *dummyImg = @"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAFUlEQVR42mNkYPhfz0AEYBxVSF+FAP5FDvcfRYWgAAAAAElFTkSuQmCC";
+    NSDictionary *post = @{@"username" : self.currentUser.username,
+                           @"image" : dummyImg,
+                           @"videoPath": recordingPath,
+                           @"description" : @"",
+                           @"report_link" : @"",
+                           @"content_type" : @2,
+                           @"is_published": @1
+                           };
+    [self.library unregisterChangeObserver];
+    [self sendPost:post completion:^(BOOL success) {
+        
+    }];
+
+}
 
 - (void)sendPost:(NSDictionary*)postData completion:(SendPostCompletionBlock)completion {
     BLog();
     
     
+    UIView *overlay = [[UIView alloc] initWithFrame:UIScreen.mainScreen.bounds];
+    self.overlay = overlay;
     UIView *loadingView = [self loadingView:@"Just a sec..."];
     UIButton *cancelBtn = [UIButton new];
     cancelBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
     [cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [cancelBtn setTitle:[NSLocalizedString(@"Cancel", nil) uppercaseString] forState:UIControlStateNormal];
     cancelBtn.frame = (CGRect) (CGRect){0, loadingView.frame.size.height - 60, loadingView.frame.size.width, 60};
-    [cancelBtn addTarget:self action:@selector(cancelRequests:) forControlEvents:UIControlEventTouchUpInside];
-    [self.mainWindow addSubview:loadingView];
-    [self.mainWindow addSubview:cancelBtn];
+    [cancelBtn addTarget:self action:@selector(cancelRequests) forControlEvents:UIControlEventTouchUpInside];
+    [self.overlay addSubview:loadingView];
+    [self.overlay addSubview:cancelBtn];
+    [self.mainWindow addSubview:self.overlay];
     
     if (!postData[@"image"]) {
         if (completion)
@@ -575,6 +568,8 @@ CFTimeInterval bln_startTime;
             self.errorMessage = [NSString stringWithFormat:@"failed with response error %@\n username %@", error.localizedDescription, self.currentUser.username];
 #endif
         }
+        
+        [self.overlay removeFromSuperview];  
     }];
    
 }
@@ -582,6 +577,12 @@ CFTimeInterval bln_startTime;
 
 - (void)setCurrentPost:(PrismPost *)currentPost {
     _currentPost = currentPost;
+}
+
+- (void)cancelRequests {
+    [self.apiClient cancelRequests];
+    
+    [self.overlay removeFromSuperview];
 }
 
 
@@ -614,6 +615,13 @@ CFTimeInterval bln_startTime;
 
 
 #pragma mark - Helpers
+
+- (PRPhotosUtils *)library {
+    if (!_library) {
+        _library = [PRPhotosUtils new];
+    }
+    return _library;
+}
 
 + (NSBundle*)bundle {
     return [NSBundle bundleForClass:self];    
