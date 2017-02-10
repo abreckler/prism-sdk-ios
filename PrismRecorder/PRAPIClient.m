@@ -71,10 +71,6 @@ NSString *const _PRTestingURLString = @"https://stage.blink.am";
     [_sendPostTask resume];
 }
 
-
-
-#pragma mark - Private
-
 - (void)cancelRequests {
     
     if (_sendPostTask) {
@@ -82,6 +78,11 @@ NSString *const _PRTestingURLString = @"https://stage.blink.am";
         _sendPostTask = nil;
     }
 }
+
+
+#pragma mark - Private
+
+
 
 
 - (void)invalidateSession {
