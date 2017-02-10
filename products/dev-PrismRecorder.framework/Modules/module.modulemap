@@ -1,6 +1,0 @@
-framework module PrismRecorder {
-  umbrella header "PrismRecorder.h"
-
-  export *
-  module * { export * }
-}
