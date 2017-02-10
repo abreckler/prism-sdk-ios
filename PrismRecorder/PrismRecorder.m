@@ -56,6 +56,8 @@ CFTimeInterval bln_startTime;
     
     [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:UserDefaultsKey];
     
+    //TODO: Check for permissions
+    
     _currentPost = nil;
     _currentUser = [PrismUser new];
     _apiClient = [PRAPIClient new];
