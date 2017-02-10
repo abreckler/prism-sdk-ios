@@ -130,7 +130,7 @@ static NSString * const ReplaceIdentifier = @"io.prism.recorder";
             PHFetchOptions *options = [self assetsFetchOptions];
 //            options.fetchLimit = 1;
             self.assetsFetchResults =  [PHAsset fetchAssetsWithOptions:options];
-            BLog(@"%li", self.assetsFetchResults.count);
+//            BLog(@"%li", (unsigned long)self.assetsFetchResults.count);
             PHAsset *latest = self.assetsFetchResults.firstObject;
             
             if (!latest.hidden) {

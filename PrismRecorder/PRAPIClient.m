@@ -190,9 +190,7 @@ NSString *const _PRTestingURLString = @"https://stage.blink.am";
 
 
 -(BOOL)isDebugEnabled {
-    #ifdef DEBUG
-        return true;
-    #endif
+    return false;
 }
 
 
