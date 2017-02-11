@@ -80,12 +80,15 @@ CFTimeInterval bln_startTime;
     
     self.mainWindow = UIApplication.sharedApplication.keyWindow;
    
-    if (! self.mainWindow) {
+    if (!self.mainWindow) {
         self.mainWindow = UIApplication.sharedApplication.windows.lastObject;
     }
    
     if (!self.allSet)
         return;
+    
+    if (!self.currentUser)
+        [self fetchUser];
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
