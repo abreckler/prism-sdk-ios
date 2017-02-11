@@ -379,7 +379,7 @@ CFTimeInterval bln_startTime;
 - (void)screenRecorderDidChangeAvailability:(RPScreenRecorder *)screenRecorder
 {
     // handle screen recorder availability changes
-    BLog(@"availability %@", NSStringFromBool(screenRecorder.available));
+//    BLog(@"availability %@", NSStringFromBool(screenRecorder.available));
 }
 
 #pragma mark - RPPreviewViewControllerDelegate
@@ -515,7 +515,7 @@ CFTimeInterval bln_startTime;
     if ([self.currentViewController isKindOfClass:UINavigationController.class]) {
         UINavigationController *navController = (UINavigationController*)self.currentViewController;
         if ([navController.visibleViewController isKindOfClass:RPPreviewViewController.class]) {
-            BLog(@"visibleViewController class %@", navController.visibleViewController.class);
+//            BLog(@"visibleViewController class %@", navController.visibleViewController.class);
             shoudlRecord = false;
         }
     }
@@ -683,7 +683,7 @@ CFTimeInterval bln_startTime;
     while (currentViewController.presentedViewController) {
         currentViewController = currentViewController.presentedViewController;
     }
-    BLog(@"top most class %@", currentViewController.class);
+//    BLog(@"top most class %@", currentViewController.class);
     return currentViewController;
 }
 
