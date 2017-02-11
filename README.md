@@ -5,7 +5,7 @@ This README documents the steps necessary to get up and running.
 ### Add PrismRecorder ###
 
 * Drag PrismRecorder.Framework in your Xcode project
-* *Make sure "Copy items if needed" is checked*
+* **Make sure "Copy items if needed" is checked**
 
 
 ### Configuration ###
@@ -16,14 +16,12 @@ To use all the functionalities of Prism Recorder, you need 3 permissions:
 * Camera: To record the tester camera
 * Mic: to record the tester mic
 
-*on iOS 10 and above, you need to provide the permissions usage description in your Info.plist if you don't already.*
+**On iOS 10 and above, you need to provide the permissions usage description in your Info.plist if you don't already.**
+Here's a sample copy, adjust as needed:
 
-Here's a sample copy, adjust as needed.
-First right-click your Info.plist and select "Open As >> Source code".
-Navigate to the bottom of the file, right before the closing </dict>
-Paste the following:
-
-
+*First right-click your Info.plist and select "Open As >> Source code".
+*Navigate to the bottom of the file, right before the closing </dict>
+*Paste the following:
 
 ```
 #!plist
