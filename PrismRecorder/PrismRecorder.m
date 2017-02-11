@@ -17,9 +17,10 @@
 #import "PrismPost.h"
 @import ReplayKit;
 
-NSString* const UserDefaultsKey = @"io.prism.recorder.client";
+NSString* const PrismUserDefaultsKey = @"io.prism.recorder.client";
 
-@interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
+
+@interface PrismRecorder() <RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
 @property (strong, nonatomic) PrismUser *currentUser;
 @property (nonatomic) PrismPost *currentPost;
 @property (strong, nonatomic) PRAPIClient *apiClient;
@@ -29,13 +30,17 @@ NSString* const UserDefaultsKey = @"io.prism.recorder.client";
 @property (nonatomic) NSTimeInterval applicationActivatedAtTime;
 @property (nonatomic, strong) PRVideoAnnotation *videoAnnotation;
 @property (weak, nonatomic) RPPreviewViewController *previewViewController;
-
 - (void)setCurrentPost:(PrismPost *)currentPost;
 @end
 
 static PrismRecorder *sharedManager = nil;
 
 @implementation PrismRecorder
+
+
+NSString* const kPRCameraPermission = @"NSCameraUsageDescription";
+NSString* const kPRMicPermission = @"NSMicrophoneUsageDescription";
+NSString* const kPRPhotosPermission = @"NSPhotoLibraryUsageDescription";
 
 BOOL isShowing;
 CFTimeInterval bln_startTime;
@@ -54,9 +59,12 @@ CFTimeInterval bln_startTime;
     NSAssert(!clientId.isBlank, @"Client ID is missing.");
     //NSAssert([[NSUUID alloc] initWithUUIDString:clientId], @"Client ID format is invalid. Double check and try again.");
     
-    [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:UserDefaultsKey];
+    [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:PrismUserDefaultsKey];
     
     //TODO: Check for permissions
+    
+    NSAssert(self.checkForPermissionsDescriptions, @"Missing permissions descriptions in Info.plist");
+    
     
     _currentPost = nil;
     _currentUser = [PrismUser new];
@@ -107,11 +115,29 @@ CFTimeInterval bln_startTime;
     return  self.mainWindow && self.mainWindow.rootViewController;
 }
 
+- (BOOL)checkForPermissionsDescriptions {
+    
+    NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:@"Info.plist"];
+    NSArray *permissions = @[kPRCameraPermission, kPRMicPermission, kPRPhotosPermission];
+    
+    for (NSString *perm in permissions) {
+        BOOL usageDescription = [plistDict objectForKey:perm]  != nil;
+        if (!usageDescription) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 
 #pragma mark - Recording
 
 - (void)updateRecording {
 
+    if (!self.allSet)
+        return;
+    
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
         NSDate.date.timeIntervalSince1970 - self.applicationActivatedAtTime > 1.5)
     {
