@@ -61,10 +61,6 @@ CFTimeInterval bln_startTime;
     
     [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:PrismUserDefaultsKey];
     
-    //TODO: Check for permissions
-    
-    NSAssert(self.checkForPermissionsDescriptions, @"Missing permissions descriptions in Info.plist");
-    
     
     _currentPost = nil;
     _currentUser = [PrismUser new];
@@ -72,7 +68,6 @@ CFTimeInterval bln_startTime;
     [_apiClient getAccountDetails:clientId completion:^(BOOL status, NSData *data, NSError *error) {
         if (status) {
             NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            BLog(@"account %@", accountDetails);
             [_currentUser configureWithData:accountDetails];
         } else {
             NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
@@ -80,6 +75,11 @@ CFTimeInterval bln_startTime;
             //TODO: Inform host of failure
         }
     }];
+    
+    if (!self.checkForPermissionsDescriptions) {
+        BLog(@"Missing permissions descriptions in Info.plist\nRecording is disabled.");
+        return;
+    }
     
     [self attachToWindow];
 }
@@ -112,12 +112,12 @@ CFTimeInterval bln_startTime;
 }
 
 - (BOOL)allSet {
-    return  self.mainWindow && self.mainWindow.rootViewController;
+    return  self.mainWindow && self.mainWindow.rootViewController && self.checkForPermissionsDescriptions;
 }
 
 - (BOOL)checkForPermissionsDescriptions {
     
-    NSDictionary *plistDict = [NSDictionary dictionaryWithContentsOfFile:@"Info.plist"];
+    NSDictionary *plistDict = [NSBundle mainBundle].infoDictionary;
     NSArray *permissions = @[kPRCameraPermission, kPRMicPermission, kPRPhotosPermission];
     
     for (NSString *perm in permissions) {
