@@ -108,8 +108,9 @@ CFTimeInterval bln_startTime;
     
     NSAssert(self.mainWindow, @"[PrismRecorder] Main application window is missing.");
     NSAssert(self.mainWindow.rootViewController, @"[PrismRecorder] RootViewController is missing.");
+    NSAssert(!self.clientKey.isBlank, @"[PrismRecorder] Client iD is missing.");
     
-    return  self.mainWindow && self.mainWindow.rootViewController && self.checkForPermissionsDescriptions;
+    return  self.mainWindow && self.mainWindow.rootViewController && self.checkForPermissionsDescriptions && self.clientKey;
 }
 
 - (BOOL)checkForPermissionsDescriptions {
@@ -630,6 +631,19 @@ CFTimeInterval bln_startTime;
 
 
 #pragma mark - Helpers
+
+- (NSString *)clientKey {
+    if (self.currentUser) {
+        return  self.currentUser.token;
+    }
+    
+    NSString *keyDefaults = [[NSUserDefaults standardUserDefaults] stringForKey:PrismUserDefaultsKey];
+    if (keyDefaults.isBlank) {
+        keyDefaults = [[NSBundle mainBundle].infoDictionary objectForKey:@"prism_client_id"];
+    }
+    
+    return keyDefaults;
+}
 
 - (PRPhotosUtils *)library {
     if (!_library) {
