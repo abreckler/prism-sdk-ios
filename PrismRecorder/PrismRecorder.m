@@ -61,20 +61,8 @@ CFTimeInterval bln_startTime;
     
     [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:PrismUserDefaultsKey];
     
-    
     _currentPost = nil;
-    _currentUser = [PrismUser new];
-    _apiClient = [PRAPIClient new];
-    [_apiClient getAccountDetails:clientId completion:^(BOOL status, NSData *data, NSError *error) {
-        if (status) {
-            NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            [_currentUser configureWithData:accountDetails];
-        } else {
-            NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
-            //TODO: Inform host of failure
-        }
-    }];
+    [self fetchUser];
     
     if (!self.checkForPermissionsDescriptions) {
         BLog(@"Missing permissions descriptions in Info.plist\nRecording is disabled.");
@@ -108,7 +96,7 @@ CFTimeInterval bln_startTime;
     
     NSAssert(self.mainWindow, @"[PrismRecorder] Main application window is missing.");
     NSAssert(self.mainWindow.rootViewController, @"[PrismRecorder] RootViewController is missing.");
-    NSAssert(!self.clientKey.isBlank, @"[PrismRecorder] Client iD is missing.");
+    NSAssert(!self.clientKey.isBlank, @"[PrismRecorder] Client ID is missing.");
     
     return  self.mainWindow && self.mainWindow.rootViewController && self.checkForPermissionsDescriptions && self.clientKey;
 }
@@ -604,6 +592,21 @@ CFTimeInterval bln_startTime;
     _currentPost = currentPost;
 }
 
+- (void)fetchUser {
+    _currentUser = [PrismUser new];
+    _apiClient = [PRAPIClient new];
+    [_apiClient getAccountDetails:self.clientKey completion:^(BOOL status, NSData *data, NSError *error) {
+        if (status) {
+            NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            [_currentUser configureWithData:accountDetails];
+        } else {
+            NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
+            //TODO: Inform host of failure
+        }
+    }];
+}
+
 #pragma mark - App State
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification
@@ -634,9 +637,10 @@ CFTimeInterval bln_startTime;
 
 - (NSString *)clientKey {
     if (self.currentUser) {
-        return  self.currentUser.token;
+        if (self.currentUser.token)
+            return  self.currentUser.token;
     }
-    
+    //TODO: fetch user when blank
     NSString *keyDefaults = [[NSUserDefaults standardUserDefaults] stringForKey:PrismUserDefaultsKey];
     if (keyDefaults.isBlank) {
         keyDefaults = [[NSBundle mainBundle].infoDictionary objectForKey:@"prism_client_id"];
