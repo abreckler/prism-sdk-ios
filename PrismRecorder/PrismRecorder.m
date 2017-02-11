@@ -96,15 +96,8 @@ CFTimeInterval bln_startTime;
         self.mainWindow = UIApplication.sharedApplication.windows.lastObject;
     }
    
-    BLog(@"sharedApp is %@", UIApplication.sharedApplication.keyWindow.description);
-    
-    NSAssert(self.mainWindow, @"[PrismRecorder] Main application window is missing.");
-    
-    
-    if (!self.allSet) {
-        NSAssert(self.allSet, @"[PrismRecorder] Main application window is missing.");
+    if (!self.allSet)
         return;
-    }
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -112,6 +105,10 @@ CFTimeInterval bln_startTime;
 }
 
 - (BOOL)allSet {
+    
+    NSAssert(self.mainWindow, @"[PrismRecorder] Main application window is missing.");
+    NSAssert(self.mainWindow.rootViewController, @"[PrismRecorder] RootViewController is missing.");
+    
     return  self.mainWindow && self.mainWindow.rootViewController && self.checkForPermissionsDescriptions;
 }
 
@@ -135,8 +132,16 @@ CFTimeInterval bln_startTime;
 
 - (void)updateRecording {
 
-    if (!self.allSet)
+    if (!self.mainWindow) {
+        [self attachToWindow];
+    }
+    
+    
+    //TODO: Check for currentUser
+    
+    if (!self.allSet) {
         return;
+    }
     
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
         NSDate.date.timeIntervalSince1970 - self.applicationActivatedAtTime > 1.5)
