@@ -19,9 +19,9 @@ To use all the functionalities of Prism Recorder, you need 3 permissions:
 **On iOS 10 and above, you need to provide the permissions usage description in your Info.plist if you don't already.**
 Here's a sample copy, adjust as needed:
 
-*First right-click your Info.plist and select "Open As >> Source code".
-*Navigate to the bottom of the file, right before the closing </dict>
-*Paste the following:
+- First right-click your Info.plist and select "Open As >> Source code".
+- Navigate to the bottom of the file, right before the closing </dict>
+- Paste the following:
 
 ```
 #!plist
