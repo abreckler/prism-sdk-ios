@@ -132,9 +132,7 @@ CFTimeInterval bln_startTime;
 
 - (void)updateRecording {
 
-    if (!self.mainWindow) {
-        [self attachToWindow];
-    }
+    [self attachToWindow];
     
     
     //TODO: Check for currentUser
