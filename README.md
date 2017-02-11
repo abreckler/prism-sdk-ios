@@ -1,8 +1,8 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This README documents the steps necessary to get up and running.
 
-### add PrismRecorder ###
+### Add PrismRecorder ###
 
 * Drag PrismRecorder.Framework in your Xcode project
 * Make sure "Copy items if needed" is checked
@@ -23,25 +23,43 @@ First right-click your Info.plist and select "Open As >> Source code".
 Navigate to the bottom of the file, right before the closing </dict>
 Paste the following:
 
-<pre>
+
+
+```
+#!plist
+
     <key>NSMicrophoneUsageDescription</key>
     <string>We use the microphone to record testing audio and sound. Audio is muted if permission isn't granted.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Enable Photos access to save media to your camera roll</string>
     <key>NSCameraUsageDescription</key>
     <string>Enable Camera access to record testing videos.</string>
-</pre>
+```
+
+
 
 ### Launch ###
 
 * Open your AppDelegate.m
 * At the top import the PrismRecorder
 
-<pre>@import PrismRecorder</pre>
+
+```
+#!objectve-c
+
+@import PrismRecorder
+```
+
 
 * Then in your application:didFinishLaunchingWithOptions configure your Client ID 
 
-<pre> [[PrismRecorder sharedManager] enableWithClientId:CLIENTID];
-</pre>
+
+```
+#!objective-c
+
+[[PrismRecorder sharedManager] enableWithClientId:CLIENTID];
+```
+
+
 
 ### Build and Run ###
