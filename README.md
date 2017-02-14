@@ -4,11 +4,23 @@ This README documents the steps necessary to get up and running.
 
 ### Add PrismRecorder ###
 
+* Download and unzip the Framework from here https://github.com/abreckler/prism-sdk-ios/raw/master/products/PrismRecorder.zip
 * Drag PrismRecorder.Framework in your Xcode project
 * **Make sure "Copy items if needed" is checked**
 
+### Client Key (token) ###
 
-### Configuration ###
+- First right-click your Info.plist and select "Open As >> Source code".
+- Navigate to the bottom of the file, right before the closing </dict>
+- Paste the following, after replacing MYCLIENTKEY with your own key
+
+```
+	<key>prism_client_id</key>
+	<string>MYCLIENTKEY</string>
+
+```
+
+### Permissions ###
 
 To use all the functionalities of Prism Recorder, you need 3 permissions:
 
@@ -33,31 +45,6 @@ Here's a sample copy, adjust as needed:
     <key>NSCameraUsageDescription</key>
     <string>Enable Camera access to record testing videos.</string>
 ```
-
-
-
-### Launch ###
-
-* Open your AppDelegate.m
-* At the top import the PrismRecorder
-
-
-```
-#!objectve-c
-
-@import PrismRecorder
-```
-
-
-* Then in your application:didFinishLaunchingWithOptions configure your Client ID 
-
-
-```
-#!objective-c
-
-[[PrismRecorder sharedManager] enableWithClientId:CLIENTID];
-```
-
 
 
 ### Build and Run ###
