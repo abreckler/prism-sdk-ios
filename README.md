@@ -11,7 +11,7 @@ This README documents the steps necessary to get up and running.
 ### Client Key (token) ###
 
 - First right-click your Info.plist and select "Open As >> Source code".
-- Navigate to the bottom of the file, right before the closing </dict>
+- Navigate to the bottom of the file, right before the closing **< /dict>**
 - Paste the following, after replacing MYCLIENTKEY with your own key
 
 ```
@@ -32,7 +32,7 @@ To use all the functionalities of Prism Recorder, you need 3 permissions:
 Here's a sample copy, adjust as needed:
 
 - First right-click your Info.plist and select "Open As >> Source code".
-- Navigate to the bottom of the file, right before the closing </dict>
+- Navigate to the bottom of the file, right before the closing **< /dict>**
 - Paste the following:
 
 ```
