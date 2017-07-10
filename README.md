@@ -7,6 +7,7 @@ This README documents the steps necessary to get up and running.
 * Download and unzip the Framework from here https://github.com/abreckler/prism-sdk-ios/raw/master/products/PrismRecorder.zip
 * Drag PrismRecorder.Framework in your Xcode project
 * **Make sure "Copy items if needed" is checked**
+* Go to your target (project name) -> Select the General tab and make sure **"PrismRecorder.framework" is present in the embedded binaries**
 
 ### Client Key (token) ###
 
