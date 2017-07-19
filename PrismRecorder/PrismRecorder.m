@@ -110,8 +110,11 @@ CFTimeInterval bln_startTime;
     NSArray *permissions = @[kPRCameraPermission, kPRMicPermission, kPRPhotosPermission];
     
     for (NSString *perm in permissions) {
+        
         BOOL usageDescription = [plistDict objectForKey:perm]  != nil;
         if (!usageDescription) {
+            NSString *message = [@"[PrismRecorder] missing Info.plist permission key for " stringByAppendingString:perm];
+            NSAssert(!usageDescription, message);
             return false;
         }
     }
