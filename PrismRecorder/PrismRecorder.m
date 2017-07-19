@@ -17,9 +17,10 @@
 #import "PrismPost.h"
 @import ReplayKit;
 
-NSString* const UserDefaultsKey = @"io.prism.recorder.client";
+NSString* const PrismUserDefaultsKey = @"io.prism.recorder.client";
 
-@interface PrismRecorder() <UIAlertViewDelegate, RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
+
+@interface PrismRecorder() <RPScreenRecorderDelegate, RPPreviewViewControllerDelegate, PRVideoAnnotationDelegate>
 @property (strong, nonatomic) PrismUser *currentUser;
 @property (nonatomic) PrismPost *currentPost;
 @property (strong, nonatomic) PRAPIClient *apiClient;
@@ -29,13 +30,17 @@ NSString* const UserDefaultsKey = @"io.prism.recorder.client";
 @property (nonatomic) NSTimeInterval applicationActivatedAtTime;
 @property (nonatomic, strong) PRVideoAnnotation *videoAnnotation;
 @property (weak, nonatomic) RPPreviewViewController *previewViewController;
-
 - (void)setCurrentPost:(PrismPost *)currentPost;
 @end
 
 static PrismRecorder *sharedManager = nil;
 
 @implementation PrismRecorder
+
+
+NSString* const kPRCameraPermission = @"NSCameraUsageDescription";
+NSString* const kPRMicPermission = @"NSMicrophoneUsageDescription";
+NSString* const kPRPhotosPermission = @"NSPhotoLibraryUsageDescription";
 
 BOOL isShowing;
 CFTimeInterval bln_startTime;
@@ -54,24 +59,15 @@ CFTimeInterval bln_startTime;
     NSAssert(!clientId.isBlank, @"Client ID is missing.");
     //NSAssert([[NSUUID alloc] initWithUUIDString:clientId], @"Client ID format is invalid. Double check and try again.");
     
-    [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:UserDefaultsKey];
-    
-    //TODO: Check for permissions
+    [[NSUserDefaults standardUserDefaults] setObject:clientId forKey:PrismUserDefaultsKey];
     
     _currentPost = nil;
-    _currentUser = [PrismUser new];
-    _apiClient = [PRAPIClient new];
-    [_apiClient getAccountDetails:clientId completion:^(BOOL status, NSData *data, NSError *error) {
-        if (status) {
-            NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-            BLog(@"account %@", accountDetails);
-            [_currentUser configureWithData:accountDetails];
-        } else {
-            NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
-            //TODO: Inform host of failure
-        }
-    }];
+    [self fetchUser];
+    
+    if (!self.checkForPermissionsDescriptions) {
+        BLog(@"Missing permissions descriptions in Info.plist\nRecording is disabled.");
+        return;
+    }
     
     [self attachToWindow];
 }
@@ -84,19 +80,15 @@ CFTimeInterval bln_startTime;
     
     self.mainWindow = UIApplication.sharedApplication.keyWindow;
    
-    if (! self.mainWindow) {
+    if (!self.mainWindow) {
         self.mainWindow = UIApplication.sharedApplication.windows.lastObject;
     }
    
-    BLog(@"sharedApp is %@", UIApplication.sharedApplication.keyWindow.description);
-    
-    NSAssert(self.mainWindow, @"[PrismRecorder] Main application window is missing.");
-    
-    
-    if (!self.allSet) {
-        NSAssert(self.allSet, @"[PrismRecorder] Main application window is missing.");
+    if (!self.allSet)
         return;
-    }
+    
+    if (!self.currentUser)
+        [self fetchUser];
     
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(applicationWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -104,7 +96,27 @@ CFTimeInterval bln_startTime;
 }
 
 - (BOOL)allSet {
-    return  self.mainWindow && self.mainWindow.rootViewController;
+    
+    NSAssert(self.mainWindow, @"[PrismRecorder] Main application window is missing.");
+    NSAssert(self.mainWindow.rootViewController, @"[PrismRecorder] RootViewController is missing.");
+    NSAssert(!self.clientKey.isBlank, @"[PrismRecorder] Client ID is missing.");
+    
+    return  self.mainWindow && self.mainWindow.rootViewController && self.checkForPermissionsDescriptions && self.clientKey;
+}
+
+- (BOOL)checkForPermissionsDescriptions {
+    
+    NSDictionary *plistDict = [NSBundle mainBundle].infoDictionary;
+    NSArray *permissions = @[kPRCameraPermission, kPRMicPermission, kPRPhotosPermission];
+    
+    for (NSString *perm in permissions) {
+        BOOL usageDescription = [plistDict objectForKey:perm]  != nil;
+        if (!usageDescription) {
+            return false;
+        }
+    }
+    
+    return true;
 }
 
 
@@ -112,6 +124,15 @@ CFTimeInterval bln_startTime;
 
 - (void)updateRecording {
 
+    [self attachToWindow];
+    
+    
+    //TODO: Check for currentUser
+    
+    if (!self.allSet) {
+        return;
+    }
+    
     if (UIApplication.sharedApplication.applicationState == UIApplicationStateActive &&
         NSDate.date.timeIntervalSince1970 - self.applicationActivatedAtTime > 1.5)
     {
@@ -358,7 +379,7 @@ CFTimeInterval bln_startTime;
 - (void)screenRecorderDidChangeAvailability:(RPScreenRecorder *)screenRecorder
 {
     // handle screen recorder availability changes
-    BLog(@"availability %@", NSStringFromBool(screenRecorder.available));
+//    BLog(@"availability %@", NSStringFromBool(screenRecorder.available));
 }
 
 #pragma mark - RPPreviewViewControllerDelegate
@@ -494,7 +515,7 @@ CFTimeInterval bln_startTime;
     if ([self.currentViewController isKindOfClass:UINavigationController.class]) {
         UINavigationController *navController = (UINavigationController*)self.currentViewController;
         if ([navController.visibleViewController isKindOfClass:RPPreviewViewController.class]) {
-            BLog(@"visibleViewController class %@", navController.visibleViewController.class);
+//            BLog(@"visibleViewController class %@", navController.visibleViewController.class);
             shoudlRecord = false;
         }
     }
@@ -574,6 +595,21 @@ CFTimeInterval bln_startTime;
     _currentPost = currentPost;
 }
 
+- (void)fetchUser {
+    _currentUser = [PrismUser new];
+    _apiClient = [PRAPIClient new];
+    [_apiClient getAccountDetails:self.clientKey completion:^(BOOL status, NSData *data, NSError *error) {
+        if (status) {
+            NSDictionary *accountDetails = (NSDictionary*) [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            [_currentUser configureWithData:accountDetails];
+        } else {
+            NSString *respString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            BLog(@"failed with error %@ and response %@",error.localizedDescription, respString);
+            //TODO: Inform host of failure
+        }
+    }];
+}
+
 #pragma mark - App State
 
 - (void)applicationWillEnterForeground:(NSNotification *)notification
@@ -601,6 +637,20 @@ CFTimeInterval bln_startTime;
 
 
 #pragma mark - Helpers
+
+- (NSString *)clientKey {
+    if (self.currentUser) {
+        if (self.currentUser.token)
+            return  self.currentUser.token;
+    }
+    //TODO: fetch user when blank
+    NSString *keyDefaults = [[NSUserDefaults standardUserDefaults] stringForKey:PrismUserDefaultsKey];
+    if (keyDefaults.isBlank) {
+        keyDefaults = [[NSBundle mainBundle].infoDictionary objectForKey:@"prism_client_id"];
+    }
+    
+    return keyDefaults;
+}
 
 - (PRPhotosUtils *)library {
     if (!_library) {
@@ -633,7 +683,7 @@ CFTimeInterval bln_startTime;
     while (currentViewController.presentedViewController) {
         currentViewController = currentViewController.presentedViewController;
     }
-    BLog(@"top most class %@", currentViewController.class);
+//    BLog(@"top most class %@", currentViewController.class);
     return currentViewController;
 }
 
