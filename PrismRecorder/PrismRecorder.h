@@ -9,23 +9,21 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-//! Project version number for PrismRecorder.
+
 FOUNDATION_EXPORT double PrismRecorderVersionNumber;
 FOUNDATION_EXPORT const unsigned char PrismRecorderVersionString[];
-
-
 
 typedef void (^SendPostCompletionBlock)(BOOL success);
 
 @interface PrismRecorder : NSObject
 
-@property (nonatomic, readonly) NSString *errorMessage;
+@property (nonatomic, readonly, nullable) NSString *errorMessage;
 
 //engine
-+ (instancetype)sharedManager;
-- (void)enableWithClientId:(NSString*)clientId;
++ (instancetype _Nonnull )sharedManager;
+- (void)enableWithClientId:(NSString*_Nonnull)clientId;
 - (void)updateRecording;
-- (void)setRecordingPath:(NSString *)recordingPath;
-+ (NSBundle*)bundle;
+- (void)setRecordingPath:(NSString *_Nullable)recordingPath;
++ (NSBundle*_Nonnull)bundle;
 
 @end
