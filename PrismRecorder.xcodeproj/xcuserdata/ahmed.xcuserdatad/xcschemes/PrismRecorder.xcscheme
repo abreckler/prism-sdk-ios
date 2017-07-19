@@ -20,6 +20,20 @@
                ReferencedContainer = "container:PrismRecorder.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "NO"
+            buildForRunning = "YES"
+            buildForProfiling = "NO"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E2DC92321E4E22E600EB7F03"
+               BuildableName = "Prism"
+               BlueprintName = "Prism"
+               ReferencedContainer = "container:PrismRecorder.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -29,6 +43,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "E240B1FC1E488D9A00DCBB5F"
+            BuildableName = "PrismRecorder.framework"
+            BlueprintName = "PrismRecorder"
+            ReferencedContainer = "container:PrismRecorder.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
